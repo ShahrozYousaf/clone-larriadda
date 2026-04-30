@@ -1,0 +1,114 @@
+<app-header></app-header>
+@if (activeLoader) {
+  <div class="loader-overlay" id="loaderOverlay">
+    <div class="loader"></div>
+  </div>
+}
+@if (itemPopup) {
+<div class="popup-overlay"></div>
+<div class="modal">
+  <button class="close-btn">×</button>
+  <h1>16. Shahi Grønn Kylling Garlic Tikka (M)</h1>
+  <p class="desc">
+    Mør kylling marinert i en kongelig blanding av grønne urter,
+    hvitløk og krydder, grillet til perfeksjon.
+  </p>
+  <div class="price">Kr. 269</div>
+  <div class="section">
+    <h3>Select <span>*</span> <small>(Påkrevd)</small></h3>
+    <div class="options">
+      <button>Mild</button>
+      <button>Medium</button>
+      <button>Medium</button>
+      <button class="active">Hot</button>
+    </div>
+  </div>
+  <div class="section">
+    <h3>Antall</h3>
+    <div class="qty">
+      <button>-</button>
+      <div>1</div>
+      <button>+</button>
+    </div>
+  </div>
+  <div class="section">
+    <h3>Special Instructions <small>(Optional)</small></h3>
+    <textarea placeholder="Add any special requests or notes..."></textarea>
+  </div>
+  <button class="cart-btn">Legg i handlekurv</button>
+  <p class="ready-text">Klar til å legge i handlekurv</p>
+</div>
+}
+
+<!-- items.component.html -->
+<div class="page-wrapper">
+  <!-- Hero Header -->
+  <header class="page-header">
+    <h1 class="page-title">{{item_gcategory_title}}</h1>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a [routerLink]="['/', lang, 'home']" class="breadcrumb__link">Home</a>
+      <span class="breadcrumb__sep">/</span>
+      <a [routerLink]="['/', lang, 'menu']" class="breadcrumb__link">Menu</a>
+      <span class="breadcrumb__sep">/</span>
+      <span class="breadcrumb__current">{{item_gcategory_title}}</span>
+    </nav>
+    <div class="header-divider"></div>
+    <p class="header-tagline">Delight your palate with our authentic menu</p>
+  </header>
+  <!-- Menu Grid -->
+  <main class="menu-section">
+    @if (category_itemlist) {
+    <div class="menu-grid">
+      @for (item of category_itemlist; track item;) {
+      <article class="menu-card" (click)="detail(item)">
+        <!-- Glow overlay -->
+        <div class="card__glow"></div>
+        <!-- Quantity Badge -->
+        @if (item.get_itemincart > 0) {
+        <span class="card__qty">{{item.get_itemincart}}</span>
+        }
+        <!-- Card body -->
+        <div class="card__content">
+          <h2 class="card__title">
+            @if(lang == 'no') {
+            {{item.item_namelang}}
+            } @else {
+            {{item.item_name}}
+            }
+          </h2>
+          <p class="card__description">
+            @if(lang == 'no') {
+            {{item.item_saleinfolang}}
+            } @else {
+            {{item.item_saleinfo}}
+            }
+          </p>
+        </div>
+        <!-- Card footer -->
+        <div class="card__footer">
+          <span class="price-badge">{{this.general.branch_result?.branch_currencysymbol}}.
+            {{item.call_itemfinalprice}}</span>
+          <button class="btn-cart" aria-label="Add Chicken Biryani to cart">
+            <span class="btn-cart__text">
+              Add to Cart
+            </span>
+            <span class="btn-cart__ripple"></span>
+          </button>
+        </div>
+      </article>
+      }
+    </div>
+    }
+  </main>
+  <!-- Allergens Section -->
+  <section class="allergens-section">
+    <div class="allergens-card">
+      <div class="allergens-accent"></div>
+      <div class="allergens-body">
+        <h3 class="allergens-title">Allergens</h3>
+        <p class="allergens-list">{{ getAllergenString() }}</p>
+      </div>
+    </div>
+  </section>
+</div>
+<app-footer></app-footer>

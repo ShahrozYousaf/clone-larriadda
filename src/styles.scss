@@ -1,0 +1,110 @@
+/* You can add global styles to this file, and also import other style files */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.loader-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #444;
+  border-top: 3px solid #d4af37;
+  border-right: 3px solid #d4af37;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+
+
+
+.gInfoBlock {
+  max-width: 1200px;
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px 30px 20px;
+}
+
+
+.alert {
+  position: relative;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  border-left: 5px solid;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: alertFade 0.35s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* SUCCESS ALERT */
+
+.alert-success {
+  background: linear-gradient(135deg,#e9f9f1,#f7fffb);
+  color: #1c7c4d;
+  border-left-color: #21c57a;
+}
+
+.alert-success::before {
+  content: "✔";
+  font-weight: bold;
+  color: #21c57a;
+  font-size: 16px;
+}
+
+/* DANGER ALERT */
+
+.alert-danger {
+  background: linear-gradient(135deg,#ffecec,#fff7f7);
+  color: #b42323;
+  border-left-color: #ff4d4d;
+}
+
+.alert-danger::before {
+  content: "✖";
+  font-weight: bold;
+  color: #ff4d4d;
+  font-size: 16px;
+}
+
+/* hover effect */
+
+.alert:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+/* animation */
+
+@keyframes alertFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,165 @@
+<app-header></app-header>
+
+<div class="cart-page">
+  <div class="cart-header">
+    <h1 class="cart-title">Your Cart</h1>
+    <div class="cart-divider"></div>
+  </div>
+
+  <div class="cart-content">
+    <!-- Order Items Panel -->
+    <div class="order-items-panel">
+      <div class="panel-header">
+        <span class="panel-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </span>
+        <span class="panel-title">Order Items ({{ cartItems.length }})</span>
+      </div>
+
+      <!-- Empty Cart State -->
+      <div class="empty-cart" *ngIf="cartItems.length === 0">
+        <div class="empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </div>
+        <p class="empty-text">Your cart is empty.</p>
+        <button class="place-order-btn" (click)="placeOrder()">
+          Place Order <span class="btn-arrow">→</span>
+        </button>
+      </div>
+
+      <!-- Cart Items List with Scroller -->
+      <div class="items-scroll-container" *ngIf="cartItems.length > 0">
+        <div class="cart-item" *ngFor="let item of cartItems; let i = index">
+          <div class="item-info">
+            <div class="item-name">{{ item.id }}. {{ item.name }}</div>
+            <div class="item-price-per">@ Kr. {{ item.unitPrice }}/pcs</div>
+            <div class="item-total">Total: <span class="total-amount">Kr. {{ item.unitPrice * item.quantity }}</span></div>
+          </div>
+          <div class="item-controls">
+            <div class="qty-control">
+              <button class="qty-btn" (click)="decreaseQty(i)">−</button>
+              <span class="qty-value">{{ item.quantity }}</span>
+              <button class="qty-btn" (click)="increaseQty(i)">+</button>
+            </div>
+            <button class="delete-btn" (click)="removeItem(i)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6"/>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary Panel -->
+    <div class="order-summary-panel">
+      <div class="panel-header">
+        <span class="panel-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </span>
+        <span class="panel-title">Order Summary</span>
+      </div>
+
+      <!-- Empty Summary -->
+      <div class="summary-empty" *ngIf="cartItems.length === 0">
+        <p>No items to checkout.</p>
+      </div>
+
+      <!-- Summary Details -->
+      <div class="summary-details" *ngIf="cartItems.length > 0">
+        <div class="summary-row">
+          <span class="summary-label">Item</span>
+          <span class="summary-value">{{ cartItems.length }}</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row">
+          <span class="summary-label">Subtotal</span>
+          <span class="summary-value gold">Kr. {{ getSubtotal() }}</span>
+        </div>
+        <div class="summary-row total-row">
+          <span class="summary-label">Total:</span>
+          <span class="summary-value gold large">Kr. {{ getSubtotal() }}</span>
+        </div>
+
+        <!-- Promo Code -->
+        <div class="promo-section">
+          <div class="promo-box">
+            <span class="promo-icon">🏷️</span>
+            <input
+              class="promo-input"
+              type="text"
+              placeholder="Have a Promo Code?"
+              [(ngModel)]="promoCode"
+            />
+            <button class="promo-apply-btn" (click)="applyPromo()">Apply</button>
+          </div>
+        </div>
+
+        <!-- Estimated Time -->
+        <div class="estimate-row">
+          <div class="estimate-info">
+            <span class="estimate-label">Estimated Pickup Time</span>
+            <span class="estimate-value">About 30 minutes</span>
+          </div>
+          <button class="change-btn" (click)="changeTime()">Change</button>
+        </div>
+
+        <!-- Customer Details Form -->
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input class="form-input" type="text" placeholder="Full Name" [(ngModel)]="customerName" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mobile Number <span class="required">*</span></label>
+          <div class="phone-input-wrap">
+            <span class="phone-prefix">+47</span>
+            <input class="form-input phone-input" type="tel" placeholder="12345678" [(ngModel)]="mobileNumber" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address <span class="required">*</span></label>
+          <input class="form-input" type="email" placeholder="you@example.com" [(ngModel)]="email" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Add Comment <span class="optional">(optional)</span></label>
+          <textarea class="form-input form-textarea" placeholder="Any special instructions?" [(ngModel)]="comment"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Payment Method <span class="required">*</span></label>
+          <div class="payment-option">
+            <input type="radio" id="payOnCounter" name="payment" value="counter" [(ngModel)]="paymentMethod" />
+            <label for="payOnCounter" class="payment-label">Pay on Counter</label>
+          </div>
+        </div>
+
+        <button class="continue-shopping-btn" (click)="continueShopping()">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Demo: Add item button (for testing) -->
+  <div class="demo-add-bar">
+    <button class="demo-add-btn" (click)="addSampleItem()">+ Add Sample Item (Demo)</button>
+  </div>
+</div>
+
+<app-footer></app-footer>

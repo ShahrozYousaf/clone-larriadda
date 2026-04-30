@@ -1,0 +1,62 @@
+{
+  "apiUrl": "https://apps.foodsted.com/api/foodsted/aj",
+  "branch_id": 1130,
+  "siteName": "Config Shaahi Mahal",
+  "discountCode": "DISCOUNT10",
+  "discountMessage": {
+    "en": "10% Discount is Live! Use Code:",
+    "no": "10% rabatt er aktiv! Bruk kode:"
+  },
+  "OtherMessage1": {
+    "en": "Dine in- free dessert",
+    "no": "Dine in- Gratis Dessert"
+  },
+  "OtherMessage2": {
+    "en": "",
+    "no": ""
+  },
+  "timeing": {
+    "monday": {
+      "open": "14:00:00",
+      "close": "22:00:00",
+      "isClosed": false,
+      "ClosedMessage": ""
+    },
+    "tuesday": {
+      "open": "14:00:00",
+      "close": "22:00:00",
+      "isClosed": false,
+      "ClosedMessage": ""
+    },
+    "wednesday": {
+      "open": "14:00:00",
+      "close": "22:00:00",
+      "isClosed": false,
+      "ClosedMessage": ""
+    },
+    "thursday": {
+      "open": "14:00:00",
+      "close": "22:00:00",
+      "isClosed": true,
+      "ClosedMessage": "Test Holiday.."
+    },
+    "friday": {
+      "open": "14:00:00",
+      "close": "22:00:00",
+      "isClosed": false,
+      "ClosedMessage": ""
+    },
+    "saturday": {
+      "open": "11:00:00",
+      "close": "22:00:00",
+      "isClosed": false,
+      "ClosedMessage": ""
+    },
+    "sunday": {
+      "open": "11:00:00",
+      "close": "22:00:00",
+      "isClosed": false,
+      "ClosedMessage": ""
+    }
+  }
+}

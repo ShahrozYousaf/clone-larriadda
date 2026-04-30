@@ -1,0 +1,75 @@
+<app-header></app-header>
+<!-- menu-section.component.html -->
+<section class="menu-section">
+  <!-- Hero Header -->
+  <div class="menu-hero">
+    <h1 class="menu-title">{{ languageService.t(lang, 'ourmenu') }}</h1>
+
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a [routerLink]="['/', lang, 'home']" class="breadcrumb__link">Home</a>
+        <span class="breadcrumb__sep">/</span>
+        <span class="breadcrumb__current">Menu</span>
+    </nav>
+
+    <div class="divider-line"></div>
+    <p class="tagline">{{ languageService.t(lang, 'menutagline') }}</p>
+  </div>
+  <!-- Menu Categories Grid -->
+  @if (activeLoader) {
+    <div class="loader-overlay" id="loaderOverlay">
+      <div class="loader"></div>
+    </div>
+  }
+  <div class="gInfoBlock" #alert>
+  </div>
+  @if (general.categories_list) {    
+    <div class="menu-grid">
+      @for (category of general.categories_list; track category) {
+      <div [routerLink]="['/', lang, 'items', category.item_gcategory]" class="menu-card" [attr.aria-label]="'Explore ' + category.item_gcategory_title" role="button" tabindex="0">
+        <div class="card-image-wrapper">
+          <img
+            [src]="category.item_gcategory_img ? `https://apps.sahl24.com/lookup_img/`+category.item_gcategory_img : '/images/default_catrgory_image.png'"
+            [alt]="category.item_gcategory_title"
+            class="card-img"
+            loading="lazy"
+          />
+          <div class="card-overlay">
+            <div class="explore-btn">
+              <span class="explore-text">EXPLORE</span>
+            </div>
+          </div>
+          <div class="card-shine"></div>
+        </div>
+        <div class="card-footer">
+          <span class="card-name">
+            @if(lang == 'no') {
+              {{ category.lookupdetail_title_no }}
+            } @else {
+              {{ category.item_gcategory_title }}
+            }            
+          </span>
+        </div>
+      </div>
+      }
+    </div>
+  }
+
+  <!-- Download CTA -->
+  <div class="menu-download-section">
+    <h2 class="download-title">{{ languageService.t(lang, 'getmenu') }}</h2>
+    <p class="download-subtitle">{{ languageService.t(lang, 'getmenudescription') }}</p>
+    <div class="download-buttons">
+      <button class="download-btn" (click)="downloadMenu('english')">
+        <span class="dl-icon">&#8659;</span>
+        {{ languageService.t(lang, 'getmenubutton1') }}
+      </button>
+      <button class="download-btn" (click)="downloadMenu('norwegian')">
+        <span class="dl-icon">&#8659;</span>
+        {{ languageService.t(lang, 'getmenubutton2') }}
+      </button>
+    </div>
+  </div>
+
+</section>
+<app-footer></app-footer>

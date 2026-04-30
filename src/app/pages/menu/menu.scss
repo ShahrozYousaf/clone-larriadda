@@ -1,0 +1,412 @@
+// menu-section.component.scss
+
+// ─── CSS Variables ───────────────────────────────────────────────────────────
+:host {
+  --color-bg:         #000000;
+  --color-card-bg:    #ffffff;
+  --color-footer-bg:  #0f1a2e;
+  --color-gold:       #c9a84c;
+  --color-gold-light: #e2b96a;
+  --color-white:      #ffffff;
+  --color-muted:      #a0a8b8;
+  --color-overlay:    rgba(10, 20, 45, 0.72);
+  --color-overlay-hover: rgba(10, 20, 45, 0.55);
+  --card-radius:      16px;
+  --font-display:     baloo 2;
+  --font-body:        baloo 2;
+  --transition-base:  0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// ─── Google Fonts Import (add to styles.scss in real project) ────────────────
+// @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Lato:wght@400;700&display=swap');
+
+// ─── Section Shell ───────────────────────────────────────────────────────────
+.menu-section {
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--font-body);
+  color: var(--color-white);
+  padding-bottom: 80px;
+}
+
+// ─── Hero Header ─────────────────────────────────────────────────────────────
+.menu-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 72px 24px 56px;
+  text-align: center;
+}
+
+.menu-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 800;
+  color: var(--color-white);
+  letter-spacing: -0.5px;
+  margin: 0 0 18px;
+  line-height: 1.1;
+}
+
+// Breadcrumbs
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--color-muted);
+  margin-bottom: 22px;
+  letter-spacing: 0.5px;
+}
+
+.separator {
+  color: var(--color-muted);
+  opacity: 0.6;
+}
+
+.crumb {
+  cursor: default;
+  transition: color var(--transition-base);
+
+  &.active {
+    color: var(--color-white);
+    font-weight: 700;
+  }
+}
+
+// Gold Divider
+.divider-line {
+  width: 64px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  border-radius: 2px;
+  margin: 0 auto 24px;
+}
+
+// Tagline
+.tagline {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-gold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin: 0;
+  opacity: 0.9;
+}
+
+// ─── Menu Grid ───────────────────────────────────────────────────────────────
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 0 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  // 3 columns on medium screens
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 28px;
+    gap: 20px;
+  }
+
+  // 2 columns on tablet
+  @media (max-width: 860px) {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 20px;
+    gap: 16px;
+  }
+
+  // 1 column on mobile
+  @media (max-width: 540px) {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+    gap: 14px;
+  }
+}
+
+// ─── Menu Card ───────────────────────────────────────────────────────────────
+.menu-card {
+  position: relative;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--color-card-bg);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  outline: none;
+
+  // Gold border bottom accent on hover
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light), var(--color-gold));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--color-gold), 0 4px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  // Lift on hover
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  }
+}
+
+// ─── Card Image Wrapper ───────────────────────────────────────────────────────
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.38s ease;
+
+  .menu-card:hover &,
+  .menu-card:focus-visible & {
+    transform: scale(1.08);
+    filter: brightness(0.6);
+  }
+}
+
+// ─── Overlay (visible on hover) ───────────────────────────────────────────────
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: 2;
+
+  .menu-card:hover &,
+  .menu-card:focus-visible & {
+    opacity: 1;
+  }
+}
+
+.explore-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transform: translateY(12px);
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .menu-card:hover &,
+  .menu-card:focus-visible & {
+    transform: translateY(0);
+  }
+}
+
+.explore-icon {
+  font-size: 2rem;
+  color: var(--color-gold);
+  display: block;
+  animation: none;
+
+  .menu-card:hover & {
+    animation: pulseArrow 0.8s ease-in-out infinite alternate;
+  }
+}
+
+.explore-text {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+
+@keyframes pulseArrow {
+  from { transform: translateX(0); }
+  to   { transform: translateX(5px); }
+}
+
+// ─── Shine Sweep Effect ───────────────────────────────────────────────────────
+.card-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: var(--card-radius);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -60%;
+    left: -60%;
+    width: 60%;
+    height: 220%;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.14) 50%,
+      transparent 70%
+    );
+    transform: translateX(-100%) rotate(5deg);
+    transition: none;
+  }
+
+  .menu-card:hover &::after {
+    transition: transform 0.6s ease;
+    transform: translateX(300%) rotate(5deg);
+  }
+}
+
+// ─── Card Footer ─────────────────────────────────────────────────────────────
+.card-footer {
+  background-color: var(--color-footer-bg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  transition: background-color var(--transition-base);
+
+  .menu-card:hover &,
+  .menu-card:focus-visible & {
+    background-color: #182845;
+  }
+}
+
+.card-name {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-white);
+  text-align: center;
+  letter-spacing: 0.3px;
+  transition: color var(--transition-base);
+
+  .menu-card:hover &,
+  .menu-card:focus-visible & {
+    color: var(--color-gold-light);
+  }
+}
+
+// ─── Download CTA Section ─────────────────────────────────────────────────────
+.menu-download-section {
+  margin-top: 80px;
+  padding: 72px 24px;
+  background: linear-gradient(180deg, #07101f 0%, #0d1b33 100%);
+  text-align: center;
+}
+
+.download-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--color-gold);
+  margin: 0 0 14px;
+  letter-spacing: -0.5px;
+}
+
+.download-subtitle {
+  font-size: 1rem;
+  color: var(--color-muted);
+  margin: 0 0 42px;
+  letter-spacing: 0.3px;
+}
+
+.download-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-gold);
+  color: #0a1020;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 36px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background var(--transition-base),
+              transform var(--transition-base),
+              box-shadow var(--transition-base);
+  min-width: 220px;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(201, 168, 76, 0.25);
+
+  &:hover {
+    background: var(--color-gold-light);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(201, 168, 76, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .dl-icon {
+    font-size: 1.2rem;
+    font-weight: 900;
+  }
+
+  @media (max-width: 480px) {
+    min-width: 100%;
+    padding: 14px 24px;
+  }
+}
+
+// ── Breadcrumb ────────────────────────────────────────────────────────────
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  &__link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-base);
+    &:hover { color: var(--text-primary); }
+  }
+
+  &__sep     { color: var(--text-muted); }
+  &__current { color: var(--accent-gold); font-weight: 700; }
+}
