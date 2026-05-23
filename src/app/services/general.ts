@@ -69,6 +69,25 @@ export class General {
     });
     return data;
   }
+
+  calculate_totalcartitems() {
+    let cart_items:number = 0;
+    if(this.cartitems_list !== undefined) {
+      for (let index = 0; index < this.cartitems_list.length; index++) {
+        cart_items += parseFloat(this.cartitems_list[index]['qty']);
+      }
+    }
+    return cart_items;
+  }
+  calculate_totalcartamount() {
+    let sum = 0;
+    if(this.cartitems_list !== undefined) {
+      for (let index = 0; index < this.cartitems_list.length; index++) {
+        sum += parseFloat(this.cartitems_list[index]['fnetprice']);
+      }
+    }
+    return sum;
+  }
   updateReponse(response: any) {
     if (!response) {
       return;

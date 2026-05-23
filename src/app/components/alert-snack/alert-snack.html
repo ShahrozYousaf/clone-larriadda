@@ -1,0 +1,26 @@
+<div class="snack-wrapper" [class]="'snack-' + data.type">
+
+    <ng-container [ngSwitch]="data.type">
+        <mat-icon *ngSwitchCase="'success'">check_circle</mat-icon>
+        <mat-icon *ngSwitchCase="'error'">error</mat-icon>
+        <mat-icon *ngSwitchCase="'warning'">warning</mat-icon>
+        <mat-icon *ngSwitchCase="'info'">info</mat-icon>
+        <div *ngSwitchCase="'loading'" class="spinner"></div>
+    </ng-container>
+
+    <div class="snack-body">
+        <p class="snack-title">{{ data.title }}</p>
+        <p class="snack-msg">{{ data.message }}</p>
+        <a *ngIf="data.action" class="snack-action" (click)="snackRef.dismissWithAction()">
+            {{ data.action }}
+        </a>
+        <div class="progress-bar">
+            <div class="progress-inner"></div>
+        </div>
+    </div>
+
+    <button mat-icon-button (click)="snackRef.dismiss()">
+        <mat-icon>close</mat-icon>
+    </button>
+
+</div>

@@ -1,8 +1,10 @@
-import { Component, Inject, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, inject, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, } from '@angular/router';
 import { LanguageService } from '../../services/language.service';
 import { APP_CONFIG } from '../../app.config';
 import { CommonModule } from '@angular/common';
+import { General } from '../../services/general';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +12,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header {
+export class Header implements AfterViewInit {
 
+  @ViewChild('alertCart') declare alertCart: ElementRef;
+  activeLoader: boolean = false;
   opened: boolean = false;
   openedMessage: string = '';
 
@@ -21,9 +25,14 @@ export class Header {
 
   constructor(
     @Inject(APP_CONFIG) public config: any,
-    private router: Router) {
-    const currentDateTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Oslo' }));
-    const currentDayNumber = currentDateTime.getDay();
+    private router: Router,
+    public general: General,
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef,
+  ) {
+    const currentDateTime = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'Europe/Oslo' })
+    );
     const days = [
       'sunday',
       'monday',
@@ -33,8 +42,8 @@ export class Header {
       'friday',
       'saturday'
     ];
-    let currentDayName = days[currentDateTime.getDay()];
-    let timeRecord = this.config.timeing[currentDayName];
+    const currentDayName = days[currentDateTime.getDay()];
+    const timeRecord = this.config.timeing[currentDayName];
     if (timeRecord && timeRecord?.isClosed) {
       this.opened = false;
       if (timeRecord?.ClosedMessage) {
@@ -63,6 +72,7 @@ export class Header {
       }
     }
   }
+  
   ngAfterViewInit() {
     this.initJsSetup();
   }
@@ -72,7 +82,26 @@ export class Header {
     const newUrl = segments.join('/');
     window.location.href = newUrl;
   }
+  private persistCartItems() {
+    localStorage.setItem('cartitems_list', JSON.stringify(this.general.cartitems_list));
+  }
   initJsSetup() {
+
+
+
+    // ... rest of code ...
+
+    /* ----------------------------
+       MOVE TO TOP BUTTON — smooth
+    ----------------------------- */
+    const moveTopBtn = document.getElementById('moveTopBtn') as HTMLElement | null;
+    if (moveTopBtn) {
+      moveTopBtn.addEventListener('click', () => {
+        smoothScrollTo(0, 700);
+      });
+    }
+
+
     /* ----------------------------
        SMOOTH SCROLL UTILITY
        Uses manual animation — works in ALL browsers regardless of
@@ -128,9 +157,12 @@ export class Header {
       mobileMenu.classList.remove('open');
       menuOverlay.classList.remove('visible');
       document.body.style.overflow = '';
-      menuOverlay.addEventListener('transitionend', () => {
-        menuOverlay.classList.remove('active');
-      }, { once: true });
+
+      setTimeout(() => {
+        if (!mobileMenu.classList.contains('open')) {
+          menuOverlay.classList.remove('active');
+        }
+      }, 380);
     };
     menuToggle.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -165,6 +197,7 @@ export class Header {
        SMOOTH SCROLL — ALL NAV LINKS
        Desktop + Mobile
     ----------------------------- */
+    /*
     document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
@@ -182,6 +215,19 @@ export class Header {
         }, 50);
       });
     });
+    */
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (!href || !href.startsWith('#') || href === '#') return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 380); // matches transition duration
+      });
+    });
 
     /* ----------------------------
        CART MODAL — origin animation
@@ -189,50 +235,50 @@ export class Header {
     const cartModal = document.getElementById('cartModal');
     const cartClose = document.getElementById('cartClose');
     const cartIcons = document.querySelectorAll('.cart-icon, .cart-icon-mobile');
-    function openCart(triggerEl:any) {
-        if (!cartModal) return;
-        cartModal.classList.remove('animate-out');
-        cartModal.classList.add('open');
-        if (triggerEl) {
-            triggerEl.classList.add('cart-active');
-            setTimeout(() => triggerEl.classList.remove('cart-active'), 450);
-        }
+    function openCart(triggerEl: any) {
+      if (!cartModal) return;
+      cartModal.classList.remove('animate-out');
+      cartModal.classList.add('open');
+      if (triggerEl) {
+        triggerEl.classList.add('cart-active');
+        setTimeout(() => triggerEl.classList.remove('cart-active'), 450);
+      }
+      requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                cartModal.classList.add('animate-in');
-            });
+          cartModal.classList.add('animate-in');
         });
-        closeMobileMenu();
+      });
+      closeMobileMenu();
     }
     function closeCart() {
-        if (!cartModal) return;
-        cartModal.classList.remove('animate-in');
-        cartModal.classList.add('animate-out');
-        cartModal.style.background = 'rgba(0,0,0,0)';
-        cartModal.style.backdropFilter = 'blur(0px)';
-        setTimeout(() => {
-            cartModal.classList.remove('open', 'animate-out');
-            cartModal.style.background = '';
-            cartModal.style.backdropFilter = '';
-        }, 300);
+      if (!cartModal) return;
+      cartModal.classList.remove('animate-in');
+      cartModal.classList.add('animate-out');
+      cartModal.style.background = 'rgba(0,0,0,0)';
+      cartModal.style.backdropFilter = 'blur(0px)';
+      setTimeout(() => {
+        cartModal.classList.remove('open', 'animate-out');
+        cartModal.style.background = '';
+        cartModal.style.backdropFilter = '';
+      }, 300);
     }
     cartIcons.forEach(icon => {
-        icon.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            cartModal && cartModal.classList.contains('open') ? closeCart() : openCart(icon);
-        });
+      icon.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        cartModal && cartModal.classList.contains('open') ? closeCart() : openCart(icon);
+      });
     });
     if (cartClose) cartClose.addEventListener('click', closeCart);
     if (cartModal) {
-        cartModal.addEventListener('click', (e) => {
-            if (e.target === cartModal) closeCart();
-        });
+      cartModal.addEventListener('click', (e) => {
+        if (e.target === cartModal) closeCart();
+      });
     }
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && cartModal && cartModal.classList.contains('open')) {
-            closeCart();
-        }
+      if (e.key === 'Escape' && cartModal && cartModal.classList.contains('open')) {
+        closeCart();
+      }
     });
 
 
@@ -240,81 +286,175 @@ export class Header {
        LIVE CLOCK (Norway time)
     ----------------------------- */
     function updateTime() {
-        const timeEl = document.getElementById('current-time');
-        if (!timeEl) return;
-        const now = new Date();
-        timeEl.textContent = now.toLocaleTimeString('en-GB', {
-            timeZone: 'Europe/Oslo',
-            hour12: false,
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+      const timeEl = document.getElementById('current-time');
+      if (!timeEl) return;
+      const now = new Date();
+      timeEl.textContent = now.toLocaleTimeString('en-GB', {
+        timeZone: 'Europe/Oslo',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
     updateTime();
     setInterval(updateTime, 1000);
-
-    /* ----------------------------
-       MOVE TO TOP BUTTON — smooth
-    ----------------------------- */
-    const moveTopBtn = document.getElementById('moveTopBtn');
-    if (moveTopBtn) {
-        window.addEventListener('scroll', () => {
-            moveTopBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
-        }, { passive: true });
-        moveTopBtn.addEventListener('click', () => {
-            smoothScrollTo(0, 700);
-        });
-    }
 
     /* ---------------------------
        SCROLL FADE-IN ANIMATIONS
     ----------------------------- */
     const animateSelectors = [
-        '.section-title',
-        '.about-image',
-        '.about-content',
-        '.celebrate-header',
-        '.card',
-        '.celebrate-action',
-        '.hours-title',
-        '.hours-container',
-        '.contact-title',
-        '.contact-block',
-        '.contact-map',
-        '.footer-col',
-        '.badge',
-        '.catering-title',
-        '.catering-text',
-        '.hours-item',
+      '.section-title',
+      '.about-image',
+      '.about-content',
+      '.celebrate-header',
+      '.card',
+      '.celebrate-action',
+      '.hours-title',
+      '.hours-container',
+      '.contact-title',
+      '.contact-block',
+      '.contact-map',
+      '.footer-col',
+      '.badge',
+      '.catering-title',
+      '.catering-text',
+      '.hours-item',
     ];
     document.querySelectorAll<HTMLElement>(animateSelectors.join(', ')).forEach((el) => {
-        if (el.closest('.hero')) return;
-        el.classList.add('scroll-animate');
-        const staggerMap = {
-            'card':          0.12,
-            'footer-col':    0.10,
-            'contact-block': 0.15,
-            'hours-item':    0.07,
-        };
-        for (const [cls, delay] of Object.entries(staggerMap)) {
-            if (el.classList.contains(cls) && el.parentElement) {
-                const siblings = [...el.parentElement.children].filter(c => c.classList.contains(cls));
-                const idx = siblings.indexOf(el);
-                el.style.transitionDelay = `${idx * delay}s`;
-            }
+      if (el.closest('.hero')) return;
+      el.classList.add('scroll-animate');
+      const staggerMap = {
+        'card': 0.12,
+        'footer-col': 0.10,
+        'contact-block': 0.15,
+        'hours-item': 0.07,
+      };
+      for (const [cls, delay] of Object.entries(staggerMap)) {
+        if (el.classList.contains(cls) && el.parentElement) {
+          const siblings = [...el.parentElement.children].filter(c => c.classList.contains(cls));
+          const idx = siblings.indexOf(el);
+          el.style.transitionDelay = `${idx * delay}s`;
         }
+      }
     });
     const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('scroll-visible');
-                scrollObserver.unobserve(entry.target);
-            }
-        });
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('scroll-visible');
+          scrollObserver.unobserve(entry.target);
+        }
+      });
     }, {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px'
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
     });
     document.querySelectorAll('.scroll-animate').forEach(el => scrollObserver.observe(el));
   }
+
+  async change_cartitemqty(_cQty: number, _aQty: number, _item_id: any, _quotationd_id: any) {
+    let _fQty = parseInt(_cQty.toString()) + parseInt(_aQty.toString());
+    if (_fQty == 0) {
+      this.delete_cartitem(_quotationd_id);
+    } else {
+      this.activeLoader = true;
+      const formData = new FormData();
+      formData.append('branch_id', this.config.branch_id);
+      formData.append('active_walkingcustomerapp', '1');
+      formData.append('config_walkingcustomerappsignature', '1');
+      formData.append('quotation_deliverytype', '2');
+      formData.append('walkingcustomerapp_signature', this.general.walkingcustomerapp_signature ? this.general.walkingcustomerapp_signature : '');
+      formData.append('lang', this.lang);
+      formData.append('changecartqty_active', '1');
+      formData.append('changecartqty_itemid', _item_id);
+      formData.append('changecartqty_quotationdid', _quotationd_id);
+      formData.append('changecartqty_qty', _cQty.toString());
+      formData.append('changecartqty_fqty', _fQty.toString());
+      this.http.post(this.config.apiUrl + '/api/shop', formData).subscribe(
+        (response: any) => {
+          this.activeLoader = false;
+          this.general.updateReponse(response);
+          this.cdr.detectChanges();
+        },
+        error => {
+          this.activeLoader = false;
+          console.log(error);
+          console.log(error.error);
+          if (error.error.messagedetail == undefined) {
+            this.alertCart.nativeElement.insertAdjacentHTML('beforeend', '<div class="alert alert-danger"><strong>Error!</strong> Connection error.</div>');
+          } else {
+            this.alertCart.nativeElement.insertAdjacentHTML('beforeend', '<div class="alert alert-danger"><strong>Error!</strong> ' + error.error.messagedetail + '</div>');
+          }
+        });
+    }
+  }
+  delete_cartitem(quotationd_id: any) {
+    this.activeLoader = true;
+    const formData = new FormData();
+    formData.append('branch_id', this.config.branch_id);
+    formData.append('active_walkingcustomerapp', '1');
+    formData.append('config_walkingcustomerappsignature', '1');
+    formData.append('quotation_deliverytype', '2');
+    formData.append('walkingcustomerapp_signature', this.general.walkingcustomerapp_signature ? this.general.walkingcustomerapp_signature : '');
+    formData.append('lang', this.lang);
+    formData.append('cart', '1');
+    formData.append('delete_quotationdid', '1');
+    formData.append('quotationd_id', quotationd_id);
+    this.http.post(this.config.apiUrl + '/api/shop', formData).subscribe(
+      (response: any) => {
+        this.activeLoader = false;
+        this.general.updateReponse(response);
+        this.cdr.detectChanges();
+      },
+      error => {
+        this.activeLoader = false;
+        console.log(error);
+        console.log(error.error);
+        if (error.error.messagedetail == undefined) {
+          this.alertCart.nativeElement.insertAdjacentHTML('beforeend', '<div class="alert alert-danger"><strong>Error!</strong> Connection error.</div>');
+        } else {
+          this.alertCart.nativeElement.insertAdjacentHTML('beforeend', '<div class="alert alert-danger"><strong>Error!</strong> ' + error.error.messagedetail + '</div>');
+        }
+      });
+  }
+
+  scrollTo(e: Event, href: string) {
+  if (!href || !href.startsWith('#') || href === '#') return;
+
+  const target = document.querySelector(href) as HTMLElement | null;  // ✅
+  if (!target) return;
+
+  e.preventDefault();
+
+  setTimeout(() => {
+    this.smoothScrollTo(target, 600);
+  }, 380);
+}
+
+private smoothScrollTo(target: HTMLElement, duration: number) {
+  const targetY = target.getBoundingClientRect().top + window.scrollY;
+  const startY = window.scrollY;
+  const diff = targetY - startY;
+  let start: number | null = null;
+
+  const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
+  const step = (timestamp: number) => {
+    if (!start) start = timestamp;
+    const elapsed = timestamp - start;
+    const progress = Math.min(elapsed / duration, 1);
+
+    window.scrollTo(0, startY + diff * easeOut(progress));
+
+    if (elapsed < duration) {
+      requestAnimationFrame(step);
+    }
+  };
+
+  requestAnimationFrame(step);
+}
+
+
+
+
+
 }

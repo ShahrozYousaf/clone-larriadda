@@ -1,165 +1,284 @@
 <app-header></app-header>
 
-<div class="cart-page">
-  <div class="cart-header">
-    <h1 class="cart-title">Your Cart</h1>
-    <div class="cart-divider"></div>
-  </div>
+<main class="cart-page">
+  <section class="cart-header" aria-labelledby="checkout-title">
+    <h1 id="checkout-title" class="cart-title">{{languageService.t(lang, 'yourcart')}}</h1>
+    <div class="cart-divider" aria-hidden="true"></div>
+  </section>
 
-  <div class="cart-content">
-    <!-- Order Items Panel -->
-    <div class="order-items-panel">
-      <div class="panel-header">
-        <span class="panel-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 0 1-8 0"/>
+  <div class="gInfoBlock" #alert></div>
+
+  <section class="cart-content" aria-label="Checkout">
+    <article class="order-items-panel">
+      <header class="panel-header">
+        <span class="panel-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
           </svg>
         </span>
-        <span class="panel-title">Order Items ({{ cartItems.length }})</span>
-      </div>
+        <span class="panel-title">{{languageService.t(lang, 'orderitems')}} ({{ general.calculate_totalcartitems()
+          }})</span>
+      </header>
 
-      <!-- Empty Cart State -->
-      <div class="empty-cart" *ngIf="cartItems.length === 0">
-        <div class="empty-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 0 1-8 0"/>
+      @if (general.cartitems_list.length === 0) {
+      <div class="empty-cart">
+        <div class="empty-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
           </svg>
         </div>
-        <p class="empty-text">Your cart is empty.</p>
-        <button class="place-order-btn" (click)="placeOrder()">
-          Place Order <span class="btn-arrow">→</span>
+
+        <p class="empty-text">{{languageService.t(lang, 'emptycart')}}</p>
+
+        <button class="place-order-btn" type="button" [routerLink]="['/', lang, 'menu']">
+          {{languageService.t(lang, 'gotomenu')}}
+          <span class="btn-arrow" aria-hidden="true">→</span>
         </button>
       </div>
-
-      <!-- Cart Items List with Scroller -->
-      <div class="items-scroll-container" *ngIf="cartItems.length > 0">
-        <div class="cart-item" *ngFor="let item of cartItems; let i = index">
+      } @else {
+      <div class="items-scroll-container">
+        @for (record of general.cartitems_list; track record.quotationd_id) {
+        <div class="cart-item">
           <div class="item-info">
-            <div class="item-name">{{ item.id }}. {{ item.name }}</div>
-            <div class="item-price-per">@ Kr. {{ item.unitPrice }}/pcs</div>
-            <div class="item-total">Total: <span class="total-amount">Kr. {{ item.unitPrice * item.quantity }}</span></div>
+            <h2 class="item-name">{{ record.item_name }}</h2>
+
+            <p class="item-price-per">
+              @ {{ general.branch_result?.currency_symbol }}
+              {{ record.fnetprice / record.qty | number:'1.2-2' }}/{{ record.item_unit }}
+            </p>
+
+            <p class="item-total">
+              Total:
+              <span class="total-amount">
+                {{ general.branch_result?.currency_symbol }}
+                {{ record.fnetprice | number:'1.2-2' }}
+              </span>
+            </p>
           </div>
-          <div class="item-controls">
-            <div class="qty-control">
-              <button class="qty-btn" (click)="decreaseQty(i)">−</button>
-              <span class="qty-value">{{ item.quantity }}</span>
-              <button class="qty-btn" (click)="increaseQty(i)">+</button>
+
+          <div class="item-controls" aria-label="Cart item controls">
+            <div class="qty-control" aria-label="Quantity selector">
+              <button class="qty-btn" type="button" aria-label="Decrease quantity"
+                (click)="change_cartitemqty(-1, record.qty, record.item_id, record.quotationd_id)">
+                −
+              </button>
+
+              <span class="qty-value" aria-label="Quantity">{{ record.qty }}</span>
+
+              <button class="qty-btn" type="button" aria-label="Increase quantity"
+                (click)="change_cartitemqty(1, record.qty, record.item_id, record.quotationd_id)">
+                +
+              </button>
             </div>
-            <button class="delete-btn" (click)="removeItem(i)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                <path d="M10 11v6M14 11v6"/>
-                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+
+            <button class="delete-btn" type="button" aria-label="Remove item"
+              (click)="delete_cartitem(record.quotationd_id)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6 18 20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                <path d="M10 11v6M14 11v6" />
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
               </svg>
             </button>
           </div>
         </div>
+        }
       </div>
-    </div>
+      }
+    </article>
 
-    <!-- Order Summary Panel -->
-    <div class="order-summary-panel">
-      <div class="panel-header">
-        <span class="panel-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 0 1-8 0"/>
+    <aside class="order-summary-panel" aria-labelledby="summary-title">
+      <header class="panel-header">
+        <span class="panel-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11h6" />
+            <path d="M9 15h6" />
+            <path d="M17 3H7a2 2 0 0 0-2 2v16l3-2 3 2 3-2 3 2 3-2V5a2 2 0 0 0-2-2z" />
           </svg>
         </span>
-        <span class="panel-title">Order Summary</span>
-      </div>
+        <span id="summary-title" class="panel-title">{{languageService.t(lang, 'ordersummary')}}</span>
+      </header>
 
-      <!-- Empty Summary -->
-      <div class="summary-empty" *ngIf="cartItems.length === 0">
-        <p>No items to checkout.</p>
+      @if (general.cartitems_list.length === 0) {
+      <div class="summary-empty">
+        <p>{{languageService.t(lang, 'noitem')}}</p>
       </div>
-
-      <!-- Summary Details -->
-      <div class="summary-details" *ngIf="cartItems.length > 0">
+      } @else {
+      <div class="summary-details">
         <div class="summary-row">
-          <span class="summary-label">Item</span>
-          <span class="summary-value">{{ cartItems.length }}</span>
+          <span class="summary-label"></span>
+          <span class="summary-value">{{languageService.t(lang, 'noteordersummary')}}</span>
         </div>
+
         <div class="summary-divider"></div>
+
         <div class="summary-row">
           <span class="summary-label">Subtotal</span>
-          <span class="summary-value gold">Kr. {{ getSubtotal() }}</span>
-        </div>
-        <div class="summary-row total-row">
-          <span class="summary-label">Total:</span>
-          <span class="summary-value gold large">Kr. {{ getSubtotal() }}</span>
+          <span class="summary-value gold">
+            {{ general.branch_result?.branch_currencysymbol }}.
+            {{ general.calculate_totalcartamount() | number:'1.2-2' }}
+          </span>
         </div>
 
-        <!-- Promo Code -->
         <div class="promo-section">
           <div class="promo-box">
-            <span class="promo-icon">🏷️</span>
-            <input
-              class="promo-input"
-              type="text"
-              placeholder="Have a Promo Code?"
-              [(ngModel)]="promoCode"
-            />
-            <button class="promo-apply-btn" (click)="applyPromo()">Apply</button>
+            <div class="promo-icon">
+              <svg class="ticket-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M21.41 11.58L12.41 2.58A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.42l9 9a2 2 0 0 0 2.82 0l7-7a2 2 0 0 0 0-2.84Z"
+                  fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                <!-- Hole -->
+                <circle cx="6.5" cy="6.5" r="1" fill="currentColor" />
+              </svg>
+            </div>
+            <input class="promo-input" type="text" placeholder="Have a Promo Code?" autocomplete="off"
+              [(ngModel)]="inputpvoucher_code" />
+            <button class="promo-apply-btn" type="button" (click)="applyPromo()">{{languageService.t(lang,
+              'apply')}}</button>
           </div>
         </div>
 
-        <!-- Estimated Time -->
+        @if (pvoucher_validated === 1) {
+        <div class="summary-row">
+          <span class="summary-label">{{languageService.t(lang, 'promodiscount')}}</span>
+          <span class="summary-value gold">
+            {{ general.branch_result?.branch_currencysymbol }}.
+            {{ pvoucher_paidamount | number:'1.2-2' }}
+          </span>
+        </div>
+        <div
+          style="font-size: 15px; display: flex; justify-content: space-between; align-items: center; color: #78BE20;">
+          <strong> {{languageService.t(lang, 'applied')}}</strong>
+          <strong>{{languageService.t(lang, 'discount')}}</strong>
+        </div>
+        }
+
+        <div class="summary-row total-row">
+          <span class="summary-label">Total:</span>
+          <span class="summary-value gold large">
+            {{ general.branch_result?.branch_currencysymbol }}.
+            {{ (general.calculate_totalcartamount() - this.pvoucher_paidamount) | number:'1.2-2' }}
+          </span>
+        </div>
+
+
+        @if (defaultTime) {
         <div class="estimate-row">
           <div class="estimate-info">
-            <span class="estimate-label">Estimated Pickup Time</span>
-            <span class="estimate-value">About 30 minutes</span>
+            <span class="estimate-label">{{languageService.t(lang, 'picktime')}}</span>
+            <span class="estimate-value">{{languageService.t(lang, 'about')}}{{ estimated_orderreadytime }}
+              {{languageService.t(lang, 'minutes')}}</span>
           </div>
-          <button class="change-btn" (click)="changeTime()">Change</button>
+          <button class="change-btn" type="button" (click)="(defaultTime = !defaultTime)">Change</button>
+        </div>
+        }
+
+        @if (!defaultTime) {
+        <div class="estimate-row">
+          <div class="estimate-info">
+            <span class="estimate-label">Pickup Time</span>
+            Date:
+            <input type="date" [(ngModel)]="quotation_sdate" />
+            Time:
+            <input type="time" [(ngModel)]="quotation_stime" />
+          </div>
+          <button class="change-btn" type="button" (click)="(defaultTime = !defaultTime)">Cancel</button>
+        </div>
+        }
+
+
+
+        <div class="form-group">
+          <label class="form-label" for="party_displayname">{{languageService.t(lang, 'name')}}<span
+              class="required">*</span></label>
+          <input #partyDisplayNameInput id="party_displayname" class="form-input" type="text" placeholder="Full Name"
+            autocomplete="name" [(ngModel)]="party_displayname" />
         </div>
 
-        <!-- Customer Details Form -->
         <div class="form-group">
-          <label class="form-label">Name</label>
-          <input class="form-input" type="text" placeholder="Full Name" [(ngModel)]="customerName" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Mobile Number <span class="required">*</span></label>
+          <label class="form-label" for="party_mobile">
+            {{languageService.t(lang, 'number')}}
+            <span class="required">*</span>
+          </label>
           <div class="phone-input-wrap">
-            <span class="phone-prefix">+47</span>
-            <input class="form-input phone-input" type="tel" placeholder="12345678" [(ngModel)]="mobileNumber" />
+            <span class="phone-prefix">{{ quotation_shippingcallingcode }}</span>
+            <input #partyMobileInput id="party_mobile" class="form-input phone-input" type="number"
+              placeholder="12345678" autocomplete="tel" [(ngModel)]="party_mobile" />
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Email Address <span class="required">*</span></label>
-          <input class="form-input" type="email" placeholder="you@example.com" [(ngModel)]="email" />
+          <label class="form-label" for="quotation_shippingemail">
+            {{languageService.t(lang, 'emailadress')}}
+            <span class="required">*</span>
+          </label>
+          <input #quotationShippingEmailInput id="quotation_shippingemail" class="form-input" type="email"
+            placeholder="you@example.com" autocomplete="email" [(ngModel)]="quotation_shippingemail" />
         </div>
 
         <div class="form-group">
-          <label class="form-label">Add Comment <span class="optional">(optional)</span></label>
-          <textarea class="form-input form-textarea" placeholder="Any special instructions?" [(ngModel)]="comment"></textarea>
+          <label class="form-label" for="quotation_remarks">
+            {{languageService.t(lang, 'addcomment')}}
+            <span class="optional">({{languageService.t(lang, 'optional')}})</span>
+          </label>
+          <textarea id="quotation_remarks" class="form-input form-textarea" placeholder="Any special instructions?"
+            [(ngModel)]="quotation_remarks"></textarea>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Payment Method <span class="required">*</span></label>
+          <span class="form-label">
+            {{languageService.t(lang, 'payment')}}
+            <span class="required">*</span>
+          </span>
+
+          @if (porder_method_cash === 1) {
           <div class="payment-option">
-            <input type="radio" id="payOnCounter" name="payment" value="counter" [(ngModel)]="paymentMethod" />
-            <label for="payOnCounter" class="payment-label">Pay on Counter</label>
+            <input id="pay_counter" type="radio" name="quotation_mode" value="0" [(ngModel)]="quotation_mode" />
+            <label for="pay_counter" class="payment-label">{{languageService.t(lang, 'payoncounter')}}</label>
           </div>
+          }
+
+          @if (porder_method_general === 1) {
+          <div class="payment-option">
+            <input id="pay_vipps" type="radio" name="quotation_mode" value="2" [(ngModel)]="quotation_mode" />
+            <label for="pay_vipps" class="payment-label">VIPPS</label>
+          </div>
+          }
+          @if (porder_method_card === 1) {
+          <div class="payment-option">
+            <input id="pay_card" type="radio" name="quotation_mode" value="1" [(ngModel)]="quotation_mode" />
+            <label for="pay_card" class="payment-label">Card</label>
+          </div>
+          }
+        </div>
+        <div class="checkout-buttons">
+          <button [disabled]="isOrderDisabled()" class="place-order-btn" type="button" (click)="placeOrder()">
+            {{languageService.t(lang, 'placeorder')}}
+          </button>
+          <button class="continue-shopping-btn" type="button" [routerLink]="['/', lang, 'menu']">
+            {{languageService.t(lang, 'gotomenu')}}
+          </button>
         </div>
 
-        <button class="continue-shopping-btn" (click)="continueShopping()">Continue Shopping</button>
       </div>
-    </div>
-  </div>
+      }
+    </aside>
+  </section>
 
-  <!-- Demo: Add item button (for testing) -->
-  <div class="demo-add-bar">
-    <button class="demo-add-btn" (click)="addSampleItem()">+ Add Sample Item (Demo)</button>
+  @if (activeLoader) {
+  <div class="loader-overlay" id="loaderOverlay" aria-live="polite" aria-label="Loading">
+    <div class="loader"></div>
   </div>
-</div>
+  }
+</main>
 
 <app-footer></app-footer>

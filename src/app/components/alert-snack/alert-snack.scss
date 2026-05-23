@@ -1,0 +1,102 @@
+@use "sass:list";
+
+$types: (
+  success: (#0F6E56, #23c79e, #5DCAA5),
+  error: (#A32D2D, #e66565, #F09595),
+  warning: (#854F0B, #5d3606, #EF9F27),
+  info: (#185FA5, #3f83c2, #85B7EB),
+  loading: (#3C3489, #3822ff, #AFA9EC),
+);
+
+// Generate styles dynamically
+@each $type, $colors in $types {
+  .snack-#{$type} {
+    background: list.nth($colors, 2) !important;
+    border-left: 4px solid list.nth($colors, 3) !important;
+
+    .snack-title,
+    .snack-action,
+    mat-icon {
+      color: list.nth($colors, 1);
+    }
+
+    mat-icon {
+      font-size: 20px;
+    }
+
+    .progress-inner {
+      background: list.nth($colors, 3);
+      animation-duration: var(--snack-duration, 5s);
+    }
+  }
+}
+
+// Snackbar container
+.mat-mdc-snack-bar-container {
+  padding: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  min-width: 320px !important;
+  max-width: 440px !important;
+}
+
+// Layout
+.snack-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+
+.snack-body {
+  flex: 1;
+  min-width: 0;
+}
+
+// Typography
+.snack-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.snack-msg {
+  font-size: 13px;
+  margin-top: 2px;
+  opacity: 0.85;
+}
+
+.snack-action {
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+// Progress bar
+.progress-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.08);
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.progress-inner {
+  height: 100%;
+  border-radius: 2px;
+  animation: shrink linear forwards;
+}
+
+// Animation
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

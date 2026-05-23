@@ -4,12 +4,10 @@
   <!-- Hero Header -->
   <div class="menu-hero">
     <h1 class="menu-title">{{ languageService.t(lang, 'ourmenu') }}</h1>
-
-
     <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a [routerLink]="['/', lang, 'home']" class="breadcrumb__link">Home</a>
+        <a [routerLink]="['/', lang, 'home']" class="breadcrumb__link">{{ languageService.t(lang, 'home') }}</a>
         <span class="breadcrumb__sep">/</span>
-        <span class="breadcrumb__current">Menu</span>
+        <a class="breadcrumb__current">{{ languageService.t(lang, 'menu') }}</a>
     </nav>
 
     <div class="divider-line"></div>
@@ -36,7 +34,7 @@
           />
           <div class="card-overlay">
             <div class="explore-btn">
-              <span class="explore-text">EXPLORE</span>
+              <span class="explore-text">{{ languageService.t(lang, 'explore') }}</span>
             </div>
           </div>
           <div class="card-shine"></div>
@@ -56,7 +54,7 @@
   }
 
   <!-- Download CTA -->
-  <div class="menu-download-section">
+  <!-- <div class="menu-download-section">
     <h2 class="download-title">{{ languageService.t(lang, 'getmenu') }}</h2>
     <p class="download-subtitle">{{ languageService.t(lang, 'getmenudescription') }}</p>
     <div class="download-buttons">
@@ -69,7 +67,7 @@
         {{ languageService.t(lang, 'getmenubutton2') }}
       </button>
     </div>
-  </div>
+  </div> -->
 
 </section>
 <app-footer></app-footer>

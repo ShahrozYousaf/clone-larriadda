@@ -7,36 +7,57 @@
 @if (itemPopup) {
 <div class="popup-overlay"></div>
 <div class="modal">
-  <button class="close-btn">×</button>
-  <h1>16. Shahi Grønn Kylling Garlic Tikka (M)</h1>
+  <button (click)="closeItemDetail()" class="close-btn">×</button>
+  <h1>
+    @if(lang == 'no') {
+      {{itemDetail.item_namelang}}
+    } @else {
+      {{itemDetail.item_name}}
+    }
+  </h1>
   <p class="desc">
-    Mør kylling marinert i en kongelig blanding av grønne urter,
-    hvitløk og krydder, grillet til perfeksjon.
+    @if(lang == 'no') { {{itemDetail.item_saleinfolang}} } @else { {{itemDetail.item_saleinfo}} }
   </p>
-  <div class="price">Kr. 269</div>
-  <div class="section">
-    <h3>Select <span>*</span> <small>(Påkrevd)</small></h3>
-    <div class="options">
-      <button>Mild</button>
-      <button>Medium</button>
-      <button>Medium</button>
-      <button class="active">Hot</button>
-    </div>
-  </div>
-  <div class="section">
-    <h3>Antall</h3>
-    <div class="qty">
-      <button>-</button>
-      <div>1</div>
-      <button>+</button>
-    </div>
-  </div>
-  <div class="section">
-    <h3>Special Instructions <small>(Optional)</small></h3>
-    <textarea placeholder="Add any special requests or notes..."></textarea>
-  </div>
-  <button class="cart-btn">Legg i handlekurv</button>
-  <p class="ready-text">Klar til å legge i handlekurv</p>
+  <div class="price">{{this.general.branch_result?.branch_currencysymbol}}. {{itemDetail.call_itemfinalprice}}</div>
+  @if (itemSpecification !== undefined) {
+    @for (groupedItem of groupedItemSpecification; track groupedItem; let gIndex = $index) {
+      <div class="section">
+        <h3>
+          @if(lang == 'no') { {{groupedItem.itemgroup_namelang}} } @else { {{groupedItem.itemgroup_name}} }
+          <span>@if(groupedItem.itemgroup_mandatory == 1) { * }</span>
+          <small>( @if(groupedItem.itemgroup_mandatory == 1) { {{ languageService.t(lang, 'required')}} } @else { {{ languageService.t(lang, 'optional')}}} )</small>
+        </h3>
+        <div class="options">
+          @for (option of groupedItem.options; track option; let oIndex = $index) {
+            <button [class.active]="isOptionSelected(option.itemgroupitem_id)" (click)="radioChangeHandler(option.itemgroupitem_id)">{{option.item_name}}</button>
+          }
+        </div>
+      </div>
+    }
+    @if(item_activeschedule === 0 && itemSchedule != undefined) {
+      <div style="line-height: 38px !important;" [innerHTML]="getHtml(itemSchedule.itemschedule_closemsg)"></div>
+    }
+    @if(item_activeschedule === 1) {
+      <div class="section">
+        <h3>{{ languageService.t(lang, 'quantity')}}</h3>
+        <div class="qty">
+          <button (click)="addqty(-1)">-</button>
+          <div>{{itemQty}}</div>
+          <button (click)="addqty(1)">+</button>
+        </div>
+      </div>
+      <div class="section">
+        <h3>{{ languageService.t(lang, 'specialinstructions')}} <small>{{ languageService.t(lang, 'optional')}}</small></h3>
+        <textarea [(ngModel)]="quotationd_instruction" placeholder="Add any special requests or notes..."></textarea>
+      </div>
+    }
+    <div class="gInfoBlock" #alertCart></div>
+    @if(item_activeschedule === 1) {
+      <button [disabled]="validateRequiredOption()" (click)="addtoCart()" class="cart-btn">{{ languageService.t(lang, 'addtocart')}}</button>
+      <p class="ready-text">{{ languageService.t(lang, 'cartnote')}}</p>
+    }
+  }
+  <div class="gInfoBlock" #alert></div>
 </div>
 }
 
@@ -46,14 +67,17 @@
   <header class="page-header">
     <h1 class="page-title">{{item_gcategory_title}}</h1>
     <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a [routerLink]="['/', lang, 'home']" class="breadcrumb__link">Home</a>
+      <a [routerLink]="['/', lang, 'home']" class="breadcrumb__link">{{ languageService.t(lang, 'home')}}</a>
       <span class="breadcrumb__sep">/</span>
-      <a [routerLink]="['/', lang, 'menu']" class="breadcrumb__link">Menu</a>
+      <a [routerLink]="['/', lang, 'menu']" class="breadcrumb__link">{{ languageService.t(lang, 'menu')}}</a>
       <span class="breadcrumb__sep">/</span>
       <span class="breadcrumb__current">{{item_gcategory_title}}</span>
     </nav>
     <div class="header-divider"></div>
-    <p class="header-tagline">Delight your palate with our authentic menu</p>
+    <p class="header-tagline">{{ languageService.t(lang, 'carttagline')}}</p>
+    @if(this.config['categorymsg_'+item_gcategory]) {
+      <div [innerHTML]="getHtml(this.config['categorymsg_'+item_gcategory])"></div>
+    }
   </header>
   <!-- Menu Grid -->
   <main class="menu-section">
@@ -64,8 +88,8 @@
         <!-- Glow overlay -->
         <div class="card__glow"></div>
         <!-- Quantity Badge -->
-        @if (item.get_itemincart > 0) {
-        <span class="card__qty">{{item.get_itemincart}}</span>
+        @if (general.get_itemincart(item.item_id)) {
+          <span class="card__qty">{{ general.get_itemincart(item.item_id) }}</span>
         }
         <!-- Card body -->
         <div class="card__content">
@@ -90,7 +114,7 @@
             {{item.call_itemfinalprice}}</span>
           <button class="btn-cart" aria-label="Add Chicken Biryani to cart">
             <span class="btn-cart__text">
-              Add to Cart
+              {{ languageService.t(lang, 'addtocart')}}
             </span>
             <span class="btn-cart__ripple"></span>
           </button>
@@ -101,14 +125,42 @@
     }
   </main>
   <!-- Allergens Section -->
-  <section class="allergens-section">
+  <!-- <section class="allergens-section">
     <div class="allergens-card">
       <div class="allergens-accent"></div>
       <div class="allergens-body">
-        <h3 class="allergens-title">Allergens</h3>
+        <h3 class="allergens-title">{{ languageService.t(lang, 'allergens')}}</h3>
         <p class="allergens-list">{{ getAllergenString() }}</p>
       </div>
     </div>
-  </section>
+  </section> -->
 </div>
+
+@if(this.general.calculate_totalcartamount() > 0) {
+  <div class="cart-toast" [routerLink]="['/', lang, 'checkout']" >
+    <div class="cart-toast__left">
+      <div class="cart-toast__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+        </svg>
+      </div>
+      <div class="cart-toast__info">
+        <span class="cart-toast__label">Total</span>
+        <span class="cart-toast__price">{{this.general.branch_result?.branch_currencysymbol}}. {{this.general.calculate_totalcartamount() | number:'1.2-2'}}</span>
+      </div>
+    </div>
+    <button class="cart-toast__btn">
+      {{ languageService.t(lang, 'checkout')}}
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
+    </button>
+  </div>
+}
+
 <app-footer></app-footer>

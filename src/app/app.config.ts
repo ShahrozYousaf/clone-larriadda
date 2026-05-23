@@ -13,8 +13,11 @@ export const appConfig: ApplicationConfig = {
     { 
       provide: APP_CONFIG,
       useValue: {
-        apiUrl: "https://apps.foodsted.com/api/foodsted/aj/",
+        apiUrl: "https://apps.foodsted.com/api/foodsted/aj",
+        paymentUrl: "http://payment.foodsted.com/api/payment/aa",
+        redirectBackReference: "directrbooking.localhost:4200",
         branch_id: 768,
+        defaultcallingcode: "+47",
         siteName: "Shaahi Mahal",
           "discountCode": "DISCOUNT5",
           "discountMessage": {

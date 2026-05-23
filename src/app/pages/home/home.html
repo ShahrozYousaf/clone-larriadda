@@ -1,11 +1,13 @@
 <app-header></app-header>
 <main>
-    <div class="banner">
-        <div class="banner-text">
-            <p><b>{{ config.discountMessage[lang] || config.discountMessage.en }}</b></p>
-            <p><b>{{ config.OtherMessage1[lang] || config.OtherMessage1.en }}</b></p>
-            <p><b>{{ config.OtherMessage2[lang] || config.OtherMessage2.en }}</b></p>
-        </div>
+    @if (!this.config.discountDisable) {
+        <div class="banner">
+            <div class="banner-text">
+                <p><b>{{ config.discountMessage[lang] || config.discountMessage.en }}</b></p>
+                <p><b>{{ config.OtherMessage1[lang] || config.OtherMessage1.en }}</b></p>
+                <p><b>{{ config.OtherMessage2[lang] || config.OtherMessage2.en }}</b></p>
+            </div>
+
         <button class="copy-btn" id="copyBtn" (click)="discountBtnClick(this.config.discountCode)">
             {{discountBtnLabel}}
             <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -15,17 +17,19 @@
             </svg>
         </button>
     </div>
+}
     <section class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1 class="hero-title">SHAAHI MAHALL INDISK<br>RESTAURANT & BAR</h1>
+            <h1 class="hero-title">Laari Adda Pakistani Street Food</h1>
             <p class="hero-subtitle">
                 {{ languageService.t(lang, 'herodescription') }}
             </p>
             <div class="hero-buttons">
-                <a href="#" target="_blank" class="btn-primary">{{ languageService.t(lang, 'ordernow') }}</a>
-                <a href="https://order.foodsted.com/en/porder/1130/shaahi-mahall-indisk-restaurant/cart?booktable=active"
-                    target="_blank" class="btn-primary">{{ languageService.t(lang, 'booktable') }}</a>
+                <a [routerLink]="['/', lang, 'menu']" routerLinkActive="active" class="btn-primary">{{
+                    languageService.t(lang, 'ordernow') }}</a>
+                <a href="https://order.foodsted.com/en/porder/1137/laari-adda/cart?booktable=active" target="_blank"
+                    class="btn-primary">{{ languageService.t(lang, 'booktable') }}</a>
             </div>
         </div>
     </section>
@@ -34,7 +38,7 @@
         <h2 class="section-title">{{ languageService.t(lang, 'aboutitle') }}</h2>
         <div class="about-container">
             <div class="about-image">
-                <img src="./images/about.webp" alt="Delicious Indian dish">
+                <img src="about.webp" alt="Delicious Indian dish">
             </div>
             <div class="about-content">
                 <h3 class="about-heading">{{ languageService.t(lang, 'abouttitle') }}</h3>
@@ -44,12 +48,11 @@
             </div>
         </div>
     </section>
-
-
+<!-- 
 
     <section class="celebrate-section" id="party-room">
         <div class="celebrate-header">
-            <span class="badge">{{ languageService.t(lang, 'partyroom') }}</span>
+            <!-- <span class="badge">{{ languageService.t(lang, 'partyroom') }}</span> 
             <h2 class="celebrate-title">{{ languageService.t(lang, 'partyroomtitle') }}</h2>
             <p class="celebrate-text">
                 {{ languageService.t(lang, 'partyroomdescription') }}
@@ -57,19 +60,9 @@
         </div>
         <div class="celebrate-cards">
             <div class="card">
-                <div class="card-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"></path>
-                        <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"></path>
-                        <path d="M2 21h20"></path>
-                        <path d="M7 8v2"></path>
-                        <path d="M12 8v2"></path>
-                        <path d="M17 8v2"></path>
-                        <path d="M7 4h.01"></path>
-                        <path d="M12 4h.01"></path>
-                        <path d="M17 4h.01"></path>
-                    </svg>
+
+                <div class="card-image">
+                    <img src="/dish 3.avif" alt="{{ languageService.t(lang, 'card1title') }}" />
                 </div>
                 <h4 class="card-title">{{ languageService.t(lang, 'card1title') }}</h4>
                 <p class="card-text">
@@ -77,13 +70,8 @@
                 </p>
             </div>
             <div class="card">
-                <div class="card-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path
-                            d="M20.8 4.6a5.5 5.5 0 0 0-7.7 0l-1.1 1-1.1-1a5.5 5.5 0 0 0-7.8 7.8l1 1 7.9 7.9 7.9-7.9 1-1a5.5 5.5 0 0 0 0-7.8z">
-                        </path>
-                    </svg>
+                <div class="card-image">
+                    <img src="/dish 2.avif" alt="{{ languageService.t(lang, 'card2title') }}" />
                 </div>
                 <h4 class="card-title">{{ languageService.t(lang, 'card2title') }}</h4>
                 <p class="card-text">
@@ -91,12 +79,8 @@
                 </p>
             </div>
             <div class="card">
-                <div class="card-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                    </svg>
+                <div class="card-image">
+                    <img src="/dish 1.avif" alt="{{ languageService.t(lang, 'card3title') }}" />
                 </div>
                 <h4 class="card-title">{{ languageService.t(lang, 'card3title') }}</h4>
                 <p class="card-text">
@@ -105,7 +89,8 @@
             </div>
         </div>
         <div class="celebrate-action">
-            <a href="tel:+4751668082" class="btn-solid-gold">{{ languageService.t(lang, 'callus') }}</a>
+            <a [routerLink]="['/', lang, 'menu']" routerLinkActive="active" class="btn-solid-gold">{{
+                languageService.t(lang, 'callus') }}</a>
         </div>
     </section>
 
@@ -165,6 +150,59 @@
         </div>
     </section>
 
+
+    ------------image silder--------------------
+
+    <div class="slider-wrapper" (mouseenter)="stopAutoPlay()" (mouseleave)="startAutoPlay()">
+        <h2 class="section-title">{{ languageService.t(lang, 'sildetitle') }}</h2>
+        <!-- Slides 
+        <div class="slider-track">
+            <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentIndex"
+                [class.prev]="i === (currentIndex - 1 + slides.length) % slides.length">
+
+                <img [src]="slide.image" [alt]="slide.title" class="slide-image" />
+
+                <div class="slide-overlay">
+                    <div class="slide-content" *ngIf="slide.title || slide.subtitle">
+                        <h2 class="slide-title" *ngIf="slide.title">{{ slide.title }}</h2>
+                        <p class="slide-subtitle" *ngIf="slide.subtitle">{{ slide.subtitle }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prev / Next Buttons -
+        <button class="slider-btn prev-btn" (click)="prev()" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <button class="slider-btn next-btn" (click)="next()" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+
+        <!-- Dot Indicators 
+        <div class="slider-dots">
+            <button class="dot" *ngFor="let slide of slides; let i = index" [class.active]="i === currentIndex"
+                (click)="goTo(i)" [attr.aria-label]="'Go to slide ' + (i + 1)">
+            </button>
+        </div>
+
+        <!-- Progress Bar
+  <div class="progress-bar">
+    <div class="progress-fill" [style.animation-duration]="autoPlayInterval + 'ms'"
+         [class.running]="true" [key]="currentIndex"></div>
+  </div> -
+
+    </div>
+ -->
+
+
     <section class="hours-section">
         <h2 class="hours-title">{{ languageService.t(lang, 'openhours') }}</h2>
         <div class="hours-container">
@@ -175,7 +213,8 @@
                             {{ day.languageDay }}
                         </span>
                         <span class="time" *ngIf="!day.isClosed">
-                            {{ ('1970-01-01T' + day.open) | date:'HH:mm' }} - {{ ('1970-01-01T' + day.close) | date:'HH:mm'}}
+                            {{ ('1970-01-01T' + day.open) | date:'HH:mm' }} - {{ ('1970-01-01T' + day.close) |
+                            date:'HH:mm'}}
                         </span>
                         <span class="time" *ngIf="day.isClosed">
                             {{ day.ClosedMessage }}
@@ -185,6 +224,110 @@
             </ul>
         </div>
     </section>
+
+
+<!------------testimonials---------------------------->
+
+<section class="testimonials-section">
+  <div class="section-header">
+    <span class="section-tag">{{ languageService.t(lang, 'sectiontag') }}</span>
+    <h2 class="section-title">{{ languageService.t(lang, 'sectiontitle1') }}<em>{{ languageService.t(lang, 'sectiontitle2') }}</em></h2>
+    <p class="section-subtitle">{{ languageService.t(lang, 'sectionsubtitle') }}</p>
+  </div>
+
+ 
+
+    <div class="slider-track-container">
+      <div
+        class="slider-track"
+        [style.transform]="'translateX(-' + currentIndex * slideWidth + '%)'"
+      >
+        <div class="review-card" *ngFor="let review of reviews; let i = index">
+          <div class="card-inner">
+            <!-- Quote Icon -->
+            <div class="quote-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+            </div>
+
+            <!-- Review Text -->
+            <p class="review-text">{{ review.text }}</p>
+
+            <!-- Star Rating -->
+            <div class="star-rating">
+              <span
+                class="star"
+                *ngFor="let star of [1,2,3,4,5]"
+                [class.filled]="star <= review.rating"
+                [class.half]="star === getCeilRating(review.rating) && review.rating % 1 !== 0"
+              >★</span>
+              <span class="rating-number">{{ review.rating }}/5</span>
+            </div>
+
+            <!-- Customer Info (shown on hover) -->
+            <div class="customer-info">
+              <div class="avatar">
+                <img *ngIf="review.avatar" [src]="review.avatar" [alt]="review.name" />
+                <span *ngIf="!review.avatar" class="avatar-initials">{{ getInitials(review.name) }}</span>
+              </div>
+              <div class="customer-details">
+                <span class="customer-name">{{ review.name }}</span>
+                <span class="customer-role">{{ languageService.t(lang, 'sectiontitle1') }}</span>
+              </div>
+            </div>
+
+            <!-- Decorative element -->
+            <div class="card-glow"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <!-- Grid View (3 or fewer cards) -->
+  <ng-template #gridView>
+    <div class="reviews-grid">
+      <div class="review-card" *ngFor="let review of reviews">
+        <div class="card-inner">
+          <div class="quote-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+          </div>
+          <p class="review-text">{{ review.text }}</p>
+          <div class="star-rating">
+            <span
+              class="star"
+              *ngFor="let star of [1,2,3,4,5]"
+              [class.filled]="star <= review.rating"
+            >★</span>
+            <span class="rating-number">{{ review.rating }}/5</span>
+          </div>
+          <div class="customer-info">
+            <div class="avatar">
+              <img *ngIf="review.avatar" [src]="review.avatar" [alt]="review.name" />
+              <span *ngIf="!review.avatar" class="avatar-initials">{{ getInitials(review.name) }}</span>
+            </div>
+            <div class="customer-details">
+              <span class="customer-name">{{ review.name }}</span>
+              <span class="customer-role">{{ languageService.t(lang, 'sectiontitle1') }}</span>
+            </div>
+          </div>
+          <div class="card-glow"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</section>
+
+
+
+
+
+
+
+
 
     <section class="contact-section" id="contact">
         <h2 class="contact-title">{{ languageService.t(lang, 'contactus') }}</h2>
@@ -200,7 +343,7 @@
                     </div>
                     <div class="contact-details">
                         <h4>{{ languageService.t(lang, 'location') }}</h4>
-                        <p>Mauritz Kartevoldsplass 1<br>4306, Sandnes</p>
+                        <p>Kjerulfs gate 1,<br>2000 Lillestrøm, Norway</p>
                     </div>
                 </div>
                 <div class="contact-block">
@@ -214,7 +357,7 @@
                     </div>
                     <div class="contact-details">
                         <h4>{{ languageService.t(lang, 'phone') }}</h4>
-                        <p><a href="tel:+4751668082">{{ languageService.t(lang, 'phone') }}</a>+47 51 66 80 82</p>
+                        <p><a href="tel:+4746980060">+47 46 98 0060</a></p>
                     </div>
                 </div>
                 <div class="contact-block">
@@ -228,18 +371,36 @@
                     </div>
                     <div class="contact-details">
                         <h4>{{ languageService.t(lang, 'email') }}</h4>
-                        <p><a href="mailto:shahi.mahal2026@hotmail.com">{{ languageService.t(lang, 'email') }}</a></p>
+                        <p><a href="mailto:nordic.bedrift@gmail.com">nordic.bedrift@gmail.com</a></p>
                     </div>
                 </div>
             </div>
             <div class="contact-map">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2060.0528254457636!2d5.733075215904944!3d58.85244588140321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x463a354b6c310c13%3A0xe510b10ec947dfeb!2sMauritz%20Kartevoldsplass%201%2C%204306%20Sandnes%2C%20Norway!5e0!3m2!1sen!2sus!4v1713532721867!5m2!1sen!2sus"
-                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1643.8330486765065!2d11.04990007664995!3d59.955879974923775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46417d0c2bb68a85%3A0xe109d85becb48eb9!2sLaari%20Adda%20Pakistani%20Street%20Food!5e1!3m2!1sen!2s!4v1778587226030!5m2!1sen!2s" width="600" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>            </div>
         </div>
     </section>
+
+<!-----------------FAQ---------------------------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </main>
 <app-footer></app-footer>

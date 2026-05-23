@@ -1,0 +1,702 @@
+
+
+// ── Design Tokens ────────────────────────────────────────────
+.order-page {
+  --op-bg:            #000000;
+  --op-surface:       #000000;
+  --op-surface-hover: #000000;
+  --op-border:         #bca467;
+  --op-gold:           #bca467; 
+  --op-gold-light:     #c09f4a; 
+  --op-gold-dim:      rgba(201, 146, 42, 0.12);
+  --op-text-primary:  #ffffff;
+  --op-text-secondary:#8892a4;
+  --op-text-muted:    #8892a4;
+  --op-green:         #2d6a3f;
+  --op-green-text:    #4caf7d;
+  --op-radius-sm:     4px;
+  --op-radius-md:     8px;
+  --op-radius-lg:     9px;
+  --op-font-display:  baloo 2;
+  --op-font-body:     baloo 2;
+  --op-shadow:        0 4px 28px rgba(0, 0, 0, 0.55);
+  --op-shadow-gold:   0 0 0 1px rgba(201, 146, 42, 0.25);
+
+  // ── Base ───────────────────────────────────────────────────
+  min-height: 100vh;
+  background-color: var(--op-bg);
+  background-image:
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(201, 146, 42, 0.07) 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1' fill='rgba(201,146,42,0.04)'/%3E%3C/g%3E%3C/svg%3E");
+  color: var(--op-text-primary);
+  font-family: var(--op-font-body);
+  padding: 20px 0px 20px;
+  box-sizing: border-box;
+
+  // ── Container ──────────────────────────────────────────────
+  .order-container {
+    max-width: 450px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  // ── Page Header ────────────────────────────────────────────
+  .page-header {
+    gap: 14px;
+    margin-bottom: 4px;
+    text-align: center;
+  }
+
+  .page-title {
+    font-family: var(--op-font-display);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: white;
+    margin: 0;
+    margin-bottom: -20px;
+    white-space: nowrap;
+  }
+
+  .page-subtitle {
+    text-align: center;
+    font-size: 10.5px;
+    color: var(--op-text-secondary);
+    // letter-spacing: 0.01em;
+    // margin: 0 0 4px;
+    font-weight: 300;
+  }
+
+  // ── Shared Panel ───────────────────────────────────────────
+  // Replaces .card — use semantic names below
+%op-panel {
+  background: var(--op-surface);
+  border: 1.5px solid #8892a4;   // ← grey, with solid added
+  border-radius: var(--op-radius-md);
+  box-sizing: border-box;
+}
+
+  // ── Order Number Panel ─────────────────────────────────────
+  .order-number-panel {
+    @extend %op-panel;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 5px;
+  }
+
+  .order-icon {
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1.5px solid var(--op-gold);
+    background: var(--op-gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--op-gold);
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .order-number-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .order-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--op-gold);
+  }
+
+  .order-number {
+    // font-family: var(--op-font-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--op-text-primary);
+    letter-spacing: 0.02em;
+  }
+
+  .order-date {
+    font-size: 10px;
+    color: var(--op-text-secondary);
+    font-weight: 300;
+  }
+
+  .order-status-badge {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    background: var(--op-green);
+    color: #fff;
+
+    &.confirmed  { background: var(--op-green); color: #fff; }
+    &.pending    { background: #5a4a10; color: var(--op-gold-light); }
+    &.cancelled  { background: #5a1010; color: #f4a0a0; }
+    &.processing { background: #163350; color: #7bc8f5; }
+  }
+
+  // ── Info Grid ──────────────────────────────────────────────
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .info-panel {
+    @extend %op-panel;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 5px 5px;
+  }
+
+  .info-icon {
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1.5px solid var(--op-gold);
+    background: var(--op-gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--op-gold);
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    &.status-icon svg {
+      color: var(--op-green-text);
+    }
+  }
+
+  .info-content {
+    display: flex;
+    flex-direction: column;
+    // gap: 4px;
+    min-width: 0;
+  }
+
+  .info-label {
+    font-size: 10.5px;
+    color: var(--op-text-secondary);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  .info-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--op-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.status-confirmed {
+      color: var(--op-green-text);
+    }
+  }
+
+  // ── Items Panel ────────────────────────────────────────────
+  .items-panel {
+    @extend %op-panel;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .items-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-bottom: 1px solid#8892a4;
+  }
+
+  .items-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--op-gold);
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .items-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--op-gold);
+    text-transform: uppercase;
+  }
+
+  .items-count {
+    font-size: 13px;
+    color: var(--op-text-secondary);
+    font-weight: 400;
+  }
+
+  // ── Item Rows ──────────────────────────────────────────────
+  .items-list {
+    padding: 0 20px;
+  }
+
+  .item-row {
+    display: flex;
+    align-items: flex-start;
+    // gap: 14px;
+    padding: 5px 0;
+    border-bottom: 2px solid var(--op-gold-dim);
+
+    &.no-border {
+      border-bottom: none;
+    }
+  }
+
+  .item-qty {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--op-text-secondary);
+    min-width: 28px;
+    padding-top: 1px;
+  }
+
+  .item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    // gap: 5px;
+    min-width: 0;
+  }
+
+  .item-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--op-text-primary);
+    letter-spacing: 0.01em;
+  }
+
+  .item-addons {
+    list-style: disc;
+    margin: 0;
+    padding-left: 18px;
+
+    li {
+      font-size: 12.5px;
+      color: var(--op-text-secondary);
+      line-height: 1.6;
+    }
+  }
+
+  .item-instruction {
+    font-size: 12px;
+    color: var(--op-text-muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .item-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--op-gold);
+    white-space: nowrap;
+    padding-top: 2px;
+    min-width: 80px;
+    text-align: right;
+  }
+
+  .item-dash {
+    color: var(--op-text-muted);
+  }
+
+  // ── Totals ─────────────────────────────────────────────────
+  .totals-section {
+    border-top: 1px solid #8892a4;
+    padding:5px 5px 5px;
+    display: flex;
+    flex-direction: column;
+    // gap: 10px;
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .total-label {
+    font-size: 13.5px;
+    color: var(--op-text-secondary);
+    font-weight: 400;
+  }
+
+  .total-value {
+    font-size: 13.5px;
+    color: var(--op-text-secondary);
+    font-weight: 400;
+  }
+
+  .grand-total {
+    margin-top: 6px;
+    padding-top: 14px;
+    border-top: 1px solid #8892a4;
+  }
+
+  .grand-label {
+    font-family: var(--op-font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--op-gold);
+    text-transform: uppercase;
+  }
+
+  .grand-value {
+    font-family: var(--op-font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--op-gold-light);
+    letter-spacing: 0.02em;
+  }
+
+  // ── Back Button ────────────────────────────────────────────
+  .back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: var(--op-radius-md);
+    background: var(--op-gold);
+    color: #fff;
+    font-family: var(--op-font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.15s ease;
+    // margin-top: 4px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      // color:var(--op-gold-light);
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      filter: brightness(0.95);
+      transform: translateY(0);
+    }
+  }
+
+  // ── Responsive ─────────────────────────────────────────────
+  @media (max-width: 400px) {
+    padding: 20px 12px 40px;
+
+    // .info-grid {
+    //   // grid-template-columns: 1fr;
+    // }
+
+    .order-number {
+      font-size: 17px;
+    }
+
+    .grand-value {
+      font-size: 19px;
+    }
+  }
+
+// ── Payment Failed Banner ──────────────────────────────────
+// ── Payment Failed Banner ──────────────────────────────────
+.payment-failed-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: var(--op-radius-md);
+  border: 1px solid rgba(255, 90, 90, 0.35);
+  background: linear-gradient(160deg, rgba(140, 25, 25, 0.50) 0%, rgba(80, 15, 15, 0.40) 100%);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.40), transparent);
+  }
+}
+
+// ── Top alert row ──────────────────────────────────────────
+.pf-top {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 14px;
+}
+
+.payment-failed-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+
+  svg { width: 16px; height: 16px; }
+}
+
+.payment-failed-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.payment-failed-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+}
+
+.payment-failed-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.50);
+}
+
+// ── Divider ────────────────────────────────────────────────
+.pf-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+// ── Payment Methods ────────────────────────────────────────
+.pf-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px 14px;
+}
+
+.pf-methods-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+// Horizontal row
+.pf-methods-row {
+  display: flex;
+  gap: 8px;
+}
+
+.pf-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: var(--op-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+
+  &.selected {
+    border-color: rgba(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.10);
+
+    .pf-radio { border-color: #ffffff; }
+
+    .pf-radio-dot {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .pf-option-name { color: #ffffff; }
+  }
+
+  &:hover:not(.selected) {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+// Radio circle
+.pf-radio {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease;
+}
+
+.pf-radio-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+// Option text
+.pf-option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.pf-option-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  transition: color 0.2s ease;
+}
+
+.pf-option-desc {
+  font-size: 9.5px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.30);
+}
+
+// ── Try Again Button ───────────────────────────────────────
+.try-again-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 28px);
+  margin: 0 14px 12px;
+  padding: 9px;
+  border-radius: var(--op-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-family: var(--op-font-body);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  svg { width: 13px; height: 13px; }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.20);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+
+// ── Payment Success Banner ─────────────────────────────────
+.payment-success-banner {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--op-radius-md);
+  border: 1px solid rgba(60, 180, 100, 0.35);
+  background: linear-gradient(160deg, rgba(20, 110, 55, 0.50) 0%, rgba(10, 60, 30, 0.40) 100%);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+
+  // white shimmer on top edge
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.40), transparent);
+  }
+}
+
+.ps-top {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 14px;
+}
+
+.payment-success-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+
+  svg { width: 16px; height: 16px; }
+}
+
+.payment-success-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.payment-success-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+}
+
+.payment-success-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.50);
+}
+  
+}

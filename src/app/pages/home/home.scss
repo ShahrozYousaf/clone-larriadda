@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 .home-content {
   padding: 2rem;
   max-width: 800px;
@@ -20,3 +22,477 @@
     }
   }
 }
+
+// ============================================================
+// Testimonials Section — Angular Component Styles
+// Aesthetic: Refined dark elegance with amber accents
+// ============================================================
+
+// --- Variables ---
+$color-bg: #000;
+$color-surface: #000;
+$color-surface-raised: #1e1e24;
+$color-border: #bca467;
+$color-accent: #bca467;
+$color-accent-soft: #000;
+$color-text-primary: #fff;
+$color-text-secondary: #fff;
+$color-star-empty: hsl(240, 28%, 13%);
+$color-star-filled: #bca467;
+$font-display: 'Baloo 2', cursive;
+$font-body: 'Baloo 2', cursive;
+$radius-card: 20px;
+$transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+$cards-visible: 3;
+$card-gap: 24px;
+
+// ============================================================
+// Auto-slide keyframes
+// --slide-count: set this CSS var on .slider-track equal to
+//   total number of cards (e.g. style="--slide-count:6")
+// ============================================================
+@keyframes autoSlide {
+  // Each "step" shifts by exactly one card width + gap.
+  // We use a CSS-custom-property trick so the track can be
+  // any length — the component just sets --card-width and
+  // --slide-count on .slider-track.
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(-1 * (var(--card-width, 340px) + #{$card-gap}) * var(--slide-count, 3))); }
+}
+
+// ============================================================
+// Section Wrapper
+// ============================================================
+.testimonials-section {
+  background: $color-bg;
+  padding: 100px 40px;
+  position: relative;
+  overflow: hidden;
+  font-family: $font-body;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &::before {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgb(0, 0, 0) 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
+  }
+
+  &::after {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgb(0, 0, 0) 0%, transparent 70%);
+    bottom: -100px;
+    right: -100px;
+  }
+}
+
+// ============================================================
+// Section Header
+// ============================================================
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: $color-accent;
+  background: $color-accent-soft;
+  border: 1px solid#bca467;
+  padding: 6px 18px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: $font-display;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 400;
+  color: $color-text-primary;
+  line-height: 1.1;
+  margin: 0 0 16px;
+  letter-spacing: -1px;
+
+  em {
+    font-style: italic;
+    color: $color-accent;
+    position: relative;
+  }
+}
+
+.section-subtitle {
+  font-size: 16px;
+  color: $color-text-secondary;
+  margin: 0;
+  line-height: 1.6;
+}
+
+// ============================================================
+// Grid View (≤ 3 cards)
+// ============================================================
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: $card-gap;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+// ============================================================
+// Slider View (> 3 cards)
+// ============================================================
+.slider-wrapper {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  z-index: 1;
+
+  // Pause auto-scroll when user hovers anywhere on the slider
+  &:hover .slider-track {
+    animation-play-state: paused;
+  }
+}
+
+.slider-track-container {
+  overflow: hidden;
+  border-radius: $radius-card;
+  padding: 12px 0 24px;
+
+  // Fade edges for infinite-scroll illusion
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+}
+
+.slider-track {
+  display: flex;
+  gap: $card-gap;
+  // Auto-slide: 3 s per card × total cards. Duration is controlled
+  // by the CSS var --auto-slide-duration (default 9s for 3 cards).
+  animation: autoSlide var(--auto-slide-duration, 9s) linear infinite;
+  will-change: transform;
+
+  // Each card: 1/3 of the visible track minus gaps
+  .review-card {
+    flex: 0 0 calc(#{math.div(100%, $cards-visible)} - #{math.div($card-gap * ($cards-visible - 1), $cards-visible)});
+    min-width: 0;
+  }
+}
+
+// ============================================================
+// Review Card
+// ============================================================
+.review-card {
+  position: relative;
+
+  .card-inner {
+    background: #000;
+    border: 1px solid rgba(#bca467, 0.65);
+    border-radius: $radius-card;
+    padding: 36px 32px 28px;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition:
+      transform 0.35s $transition-smooth,
+      border-color 0.35s $transition-smooth,
+      box-shadow 0.35s $transition-smooth;
+
+    // ── Hover state ──────────────────────────────────────────
+    &:hover {
+      transform: translateY(-6px);
+      border-color: rgba(#bca467, 0.45);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(245, 166, 35, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+      // .card-glow {
+      //   opacity: 1;
+      // }
+
+      // ── Reveal avatar / customer info ─────────────────────
+      .customer-info {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 80px; // expand to full height
+      }
+
+      // ── Reveal full review text (remove line-clamp) ───────
+      .review-text {
+        -webkit-line-clamp: unset;
+        opacity: 1;
+      }
+
+      .quote-icon {
+        color: $color-accent;
+        transform: scale(1.1);
+      }
+
+      .star.filled {
+        transform: scale(1.15);
+      }
+    }
+  }
+}
+
+// Glow overlay inside card
+.card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top left, $color-accent-soft 0%, transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  border-radius: $radius-card;
+}
+
+// ============================================================
+// Quote Icon
+// ============================================================
+.quote-icon {
+  width: 32px;
+  height: 32px;
+  color: rgba($color-accent, 0.6);
+  flex-shrink: 0;
+  transition: color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// ============================================================
+// Review Text — collapsed by default, expands on hover
+// ============================================================
+.review-text {
+  font-size: 15px;
+  line-height: 1.75;
+  color: $color-text-primary;
+  opacity: 0.75;
+  flex: 1;
+  margin: 0;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+
+  // Clamp to 4 lines when not hovered
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  // Smooth fade transition for opacity + clamp release
+  transition: opacity 0.3s ease;
+}
+
+// ============================================================
+// Star Rating
+// ============================================================
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  position: relative;
+  z-index: 1;
+}
+
+.star {
+  font-size: 18px;
+  color: $color-star-empty;
+  display: inline-block;
+
+  &.filled {
+    color: $color-star-filled;
+  }
+
+  &.half {
+    background: linear-gradient(90deg, $color-star-filled 50%, $color-star-empty 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      transition: color 0.2s ease #{($i - 1) * 0.04}s,
+                  transform 0.2s ease #{($i - 1) * 0.04}s;
+    }
+  }
+}
+
+.rating-number {
+  font-size: 12px;
+  color: $color-text-secondary;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+// ============================================================
+// Customer Info — hidden by default, revealed on card hover
+// ============================================================
+.customer-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(#bca467, 0.3);
+  position: relative;
+  z-index: 1;
+
+  // Hidden state
+  opacity: 0;
+  max-height: 0;           // collapse height when hidden …
+  overflow: hidden;
+  transform: translateY(10px);
+  transition:
+    opacity 0.38s $transition-smooth,
+    transform 0.38s $transition-smooth,
+    max-height 0.38s $transition-smooth,
+    padding-top 0.38s $transition-smooth;
+}
+
+// ============================================================
+// Avatar
+// ============================================================
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #000;
+  border: 2px solid rgba(#bca467, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // Glow ring when parent card is hovered
+  // .card-inner:hover & {
+  //   border-color: $color-accent;
+  //   // box-shadow: 0 0 12px $color-accent-glow;
+  // }
+}
+
+.avatar-initials {
+  font-size: 15px;
+  font-weight: 700;
+  color: $color-accent;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.customer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.customer-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-text-primary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.customer-role {
+  font-size: 12px;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+// ============================================================
+// Responsive
+// ============================================================
+@media (max-width: 900px) {
+  .testimonials-section {
+    padding: 72px 24px;
+  }
+
+  .slider-track {
+    // Show 2 cards on tablet
+    .review-card {
+      flex: 0 0 calc(50% - 12px);
+    }
+  }
+
+  .slider-btn {
+    &.prev-btn { left: -12px; }
+    &.next-btn { right: -12px; }
+  }
+}
+
+@media (max-width: 600px) {
+  .testimonials-section {
+    padding: 56px 20px;
+  }
+
+  .slider-track {
+    // Show 1 card on mobile
+    .review-card {
+      flex: 0 0 100%;
+    }
+  }
+
+  .slider-btn {
+    width: 40px;
+    height: 40px;
+
+    &.prev-btn { left: -8px; }
+    &.next-btn { right: -8px; }
+  }
+
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

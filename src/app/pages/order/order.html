@@ -1,0 +1,276 @@
+<app-header></app-header>
+<div class="order-page">
+  <div class="order-container">
+
+
+    @if (activeLoader) {
+      <div class="loader-overlay" id="loaderOverlay" aria-live="polite" aria-label="Loading">
+        <div class="loader"></div>
+      </div>
+    }
+
+
+    @if(quotation_result !== undefined) {
+      <div class="page-header">
+        <h1 class="page-title">{{languageService.t(lang, 'ordertitle')}}</h1>
+        <br style="clear: both;" />
+        <p class="page-subtitle">{{languageService.t(lang, 'ordertagline')}}</p>
+      </div>
+
+
+      @if(['1','2'].includes(quotation_result.quotation_mode) && !['-4','-5','-6'].includes(quotation_result.invoice_id)) {
+        @if(hasRemainingPayable) {
+          <div class="payment-failed-banner">
+            <div class="pf-top">
+              <div class="payment-failed-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+              </div>
+              <div class="payment-failed-text">
+                <span class="payment-failed-title">{{languageService.t(lang, 'payunsuccess')}}</span>
+                <span class="payment-failed-sub">{{languageService.t(lang, 'payunsuccessmsg')}}</span>
+              </div>
+            </div>
+            <div class="pf-divider"></div>
+            <div class="pf-methods">
+              <span class="pf-methods-label">{{languageService.t(lang, 'selectmethod')}}</span>
+              <div class="pf-methods-row">
+                <label class="pf-option" (click)="quotation_mode = 2" [class.selected]="quotation_mode == 2">
+                  <div class="pf-radio">
+                    <div class="pf-radio-dot"></div>
+                  </div>
+                  <div class="pf-option-info">
+                    <span class="pf-option-name">VIPPS</span>
+                  </div>
+                </label>
+                <label class="pf-option" (click)="quotation_mode = 1" [class.selected]="quotation_mode == 1">
+                  <div class="pf-radio ">
+                    <div class="pf-radio-dot"></div>
+                  </div>
+                  <div class="pf-option-info">
+                    <span class="pf-option-name">Card</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <button (click)="triggerPayment()" class="try-again-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="1 4 1 10 7 10" />
+                <path d="M3.51 15a9 9 0 1 0 .49-3.44" />
+              </svg>
+              {{languageService.t(lang, 'tryagain')}}
+            </button>
+          </div>
+        } @else {
+          <div class="payment-success-banner">
+            <div class="ps-top">
+              <div class="payment-success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </div>
+              <div class="payment-success-text">
+                <span class="payment-success-title">{{languageService.t(lang, 'paysuccessmsg')}}</span>
+                <span class="payment-success-sub">{{languageService.t(lang, 'paysuccessmsg')}}</span>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+
+      <!-- Order Number Panel -->
+      <div class="order-number-panel">
+        <div class="order-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+        </div>
+        <div class="order-number-info">
+          <span class="order-label">{{languageService.t(lang, 'ordernumber')}}</span>
+          <span class="order-number">{{quotation_result.quotation_no}}</span>
+          <span class="order-date">{{ quotation_result.quotation_created.replace(' ', 'T') | date:'dd MMM yyyy, hh:mm a' }}</span>
+        </div>
+        <!-- <div class="order-status-badge" [ngClass]="order.status.toLowerCase()">
+          {{ order.status }}
+        </div> -->
+      </div>
+
+      <!-- Info Grid -->
+      <div class="info-grid">
+
+
+        <div class="info-panel">
+          <div class="info-icon">
+
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+
+          </div>
+          <div class="info-content">
+            <span class="info-label">{{languageService.t(lang, 'customer')}}</span>
+            <span class="info-value">{{ quotation_result.quotation_shippingname }}</span>
+          </div>
+        </div>
+
+
+        <div class="info-panel">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">{{languageService.t(lang, 'ordertype')}}</span>
+            <span class="info-value">{{ quotation_result.delieryoption_name }}</span>
+          </div>
+        </div>
+
+        <div class="info-panel">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">{{languageService.t(lang, 'payment')}}</span>
+            <span class="info-value">
+              @if (quotation_result.quotation_mode == '0') { Cash }
+              @if (quotation_result.quotation_mode == '1') { Card }
+              @if (quotation_result.quotation_mode == '2') { VIPPS }
+            </span>
+          </div>
+        </div>
+
+        <div class="info-panel">
+          <div class="info-icon status-icon">
+            <svg [ngStyle]="{ color: [-6, -5, -4].includes(+quotation_result.invoice_id) ? 'red' : 'inherit' }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">{{languageService.t(lang, 'orderstatus')}}</span>
+            <span [ngStyle]="{ color: [-6, -5, -4].includes(+quotation_result.invoice_id) ? 'red' : 'inherit' }" class="info-value status-confirmed">
+              @if(lang == 'en') { {{ quotation_result.orderstatus_groupname }} }
+              @if(lang == 'no') { {{ quotation_result.orderstatus_groupname_no }} }
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Items Panel -->
+      <div class="items-panel">
+        <div class="items-header">
+          <div class="items-title-group">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>
+            <span class="items-title">{{languageService.t(lang, 'orderitemcap')}}</span>
+          </div>
+          <span class="items-count">{{quotation_detail.length}} Items</span>
+        </div>
+
+        <div class="items-list">
+          @for (quotationd of quotation_detail; track quotationd;) {
+            <div class="item-row">
+              <div class="item-qty">{{quotationd.qty}}x</div>
+              <div class="item-details">
+                <span class="item-name">{{quotationd.item_name}}</span>
+              </div>
+              <div class="item-price">{{this.general.branch_result?.branch_currencysymbol}}. {{quotationd.fnetprice}}</div>
+            </div>
+          }
+          <!-- 
+          <div class="item-row">
+            <div class="item-qty">1x</div>
+            <div class="item-details">
+              <span class="item-name">Paneer Tikka Masala</span>
+              <ul class="item-addons">
+                <li>Chicken Nuggets</li>
+                <li>Next Cola 300ml</li>
+              </ul>
+              <span class="item-instruction">
+                <em>Instruction: Hello I'm test instruction</em>
+              </span>
+            </div>
+            <div class="item-price">Kr. 199.00</div>
+          </div>
+          -->
+        </div>
+        <!-- Totals -->
+        <div class="totals-section">
+          <div class="total-row">
+            <span class="total-label">Subtotal</span>
+            <span class="total-value">{{this.general.branch_result?.branch_currencysymbol}}. {{quotation_result.entry_value}}</span>
+          </div>
+
+          @if (quotation_result.pvoucher_paidamount > 0) {
+            <div class="total-row">
+              <span class="total-label">{{languageService.t(lang, 'discountsm')}}</span>
+              <span class="total-value">{{this.general.branch_result?.branch_currencysymbol}}. {{quotation_result.pvoucher_paidamount}}</span>
+            </div>
+          }
+
+          <div class="total-row">
+            <span class="total-label">{{languageService.t(lang, 'servicefee')}}</span>
+            <span class="total-value">{{this.general.branch_result?.branch_currencysymbol}}. {{quotation_result.quotation_servicefee}}</span>
+          </div>
+          
+
+          @if (quotation_result.quotation_deliveryfee > 0) {
+            <div class="total-row">
+              <span class="total-label">{{languageService.t(lang, 'deliveryfee')}}</span>
+              <span class="total-value">{{this.general.branch_result?.branch_currencysymbol}}. {{quotation_result.quotation_deliveryfee}}</span>
+            </div>
+          }
+
+          <div class="total-row grand-total">
+            <span class="grand-label">TOTAL</span>
+            <span class="grand-value">{{this.general.branch_result?.branch_currencysymbol}}. {{quotation_result.net_payable}}</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Back Button -->
+    <button class="back-btn" [routerLink]="['/', lang, 'menu']">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+     {{languageService.t(lang, 'gobacktomenu')}}
+    </button>
+
+  </div>
+</div>
+<app-footer></app-footer>

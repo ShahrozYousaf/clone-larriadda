@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +10,21 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('shaahimahall');
+
+  private router = inject(Router);
+
+  ngOnInit() {
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => {
+        setTimeout(() => {
+          document.documentElement.scrollTop = 0; // ✅ most compatible
+          document.body.scrollTop = 0;            // ✅ Safari fallback
+        }, 50);
+      });
+  }
+
+
+
+
 }

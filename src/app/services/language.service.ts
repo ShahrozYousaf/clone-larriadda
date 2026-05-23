@@ -15,7 +15,6 @@ interface LanguageInfo {
   catering: string;
   booktable: string;
   cart: string;
-  cartbody: string;
   open: string;
   discount1: string;
   discount2: string;
@@ -57,15 +56,69 @@ interface LanguageInfo {
   information: string;
   app: string;
   allrightrevserved: string;
-  poweredby: string; 
+  poweredby: string;
   ourmenu: string;
-  menutagline: string; 
+  menutagline: string;
+  explore: string;
   getmenu: string;
   getmenudescription: string;
   getmenubutton1: string;
   getmenubutton2: string;
   copied: string;
   closed: string;
+  quantity: string;
+  specialinstructions: string;
+  optional: string;
+  addtocart: string;
+  cartnote: string;
+  carttagline: string;
+  checkout: string;
+  allergens: string;
+  yourcart: string;
+  orderitems: string;
+  ordersummary: string;
+  emptycart: string;
+  noitem: string;
+  noteordersummary: string;
+  placeorder: string;
+  gotomenu: string;
+  name: string;
+  number: string;
+  emailadress: string;
+  addcomment: string;
+  payment: string;
+  payoncounter: string;
+  picktime: string;
+  apply: string;
+  promodiscount: string;
+  discount: string;
+  applied: string;
+  minutes: string;
+  ordertitle: string;
+  ordertagline: string;
+  payunsuccess: string;
+  payunsuccessmsg: string;
+  selectmethod: string;
+  tryagain: string;
+  paysuccess: string;
+  paysuccessmsg: string;
+  ordernumber: string;
+  customer: string;
+  ordertype: string;
+  orderstatus: string;
+  orderitemcap: string;
+  items: string;
+  discountsm: string;
+  servicefee: string;
+  deliveryfee: string;
+  gobacktomenu: string;
+  required:string;
+  sildetitle:string;
+  sectiontag:string;
+  sectiontitle1:string;
+  sectiontitle2:string;
+  sectionsubtitle:string;
+
 }
 const DEFAULT_LANG: LangCode = 'no';
 const LANGUAGE_INFO: Record<LangCode, LanguageInfo> = {
@@ -77,36 +130,35 @@ const LANGUAGE_INFO: Record<LangCode, LanguageInfo> = {
     about: 'Om',
     menu: 'Meny',
     takeaway: 'Takeaway',
-    partyroom: 'Selskapslokale',
+    partyroom: 'Delikatesser',
     catering: 'Catering',
     booktable: 'Reserver Bord',
     cart: 'Vogn',
-    cartbody: 'Din bestilling er tom',
-    open: 'Lukket',
+    open: 'Åpent Nå',
     discount1: '10% rabatt er aktiv! Bruk kode:',
     discount2: 'Dine in- Gratis Dessert',
-    herodescription: 'Opplev en arv av smak - autentiske kongelige delikatesser laget for den moderne maharajaen.',
+    herodescription: 'Laari Adda Pakistani Street Food bringer den livlige smaken av pakistansk gatemat til Norge, og serverer dristige smaker, autentiske krydder og uforglemmelige kulinariske opplevelser i hver bit.',
     ordernow: 'Bestill Nå',
     aboutitle: 'Om Restauranten',
-    abouttitle: 'Velkommen til Shaahi Mahall Indisk Restaurant & Bar',
-    aboutdescription: 'På Shaahi Mahall forteller hver rett en historie om kongelig arv og tidløs smak. Inspirert av Indias storslåtte kjøkken, blander vår matopplevelse eldgamle tradisjoner med et raffinert moderne preg, og skaper en smaksopplevelse som er ment å nytes av alle.Fra våre nøye balanserte krydder til våre signaturkarriretter, er hver oppskrift laget med lidenskap og autentisitet.Ferske urter, kvalitetsingredienser og tidshevnte teknikker forenes for å levere rike aromaer og uforglemmelige smaker i hver bit. Gjør opplevelsen komplett med vårt kuraterte utvalg av forfriskende lassi, håndverksøl og fine viner – nøye utvalgt for å utfylle kjøkkenet vårt og løfte hvert måltid.Enten du blir med oss for en uformell sammenkomst eller en spesiell feiring, inviterer Shaahi Mahall deg til å spise som en konge og nyte noe virkelig eksepsjonelt.',
-    partyroomtitle: 'Feir med stil',
-    partyroomdescription:'Arranger dine spesielle øyeblikk i det elegante selskapslokalet hos Shaahi Mahall. Enten det er en bursdag, en familiesammenkomst eller en bedriftsmiddag, skaper vår innbydende atmosfære og oppmerksomme service den perfekte rammen for minneverdige feiringer.',
-    card1title: 'Bursdagsfeiringer',
-    card1description: 'Feir din spesielle dag i et livlig og komfortabelt selskapslokale med god mat og en glad atmosfære.',
-    card2title: 'Jubileumsfeiringer',
-    card2description: 'Gjør jubileet ditt minneverdig med en intim setting, deilig mat og elegant service.',
-    card3title: 'Private & Bedriftsarrangementer',
-    card3description: 'Perfekt for team-sammenkomster, bedriftsmiddager og private feiringer med familie og venner.',
-    callus: 'Ring oss',
-    cateringtitle: 'Tilpasset enhver anledning',
-    cateringdescription: 'Opplev førsteklasses catering med Shaahi Mahall, hvor tradisjon møter moderne eleganse. Vi tilbereder hver rett med nøye utvalgte krydder og ferske ingredienser for å skape uforglemmelige smaker. Fra bryllup til bedriftsarrangementer sørger vi for en smidig og profesjonell service som lar deg nyte dine spesielle øyeblikk uten stress.',
-    cateringcard1title: 'Kokkens Spesialiteter',
-    cateringcard1description: 'Kuratert meny med nordisk kjøkken og premiumgrillerte valg tilberedt av våre prisbelønte kokker.',
-    cateringcard2title: 'Perfekt Atmosfære',
-    cateringcard2description: 'Elegant omgivelse med nøye tilpasset belysning, bakgrunnsmusikk og gjennomtenkt service.',
-    cateringcard3title: 'Minneverdige Øyeblikk',
-    cateringcard3description: 'Lag varige minner med kjære i vårt sofistikerte og imøtekommende miljø.',
+    abouttitle: 'Velkommen til Laari Adda Pakistani Street Food ',
+    aboutdescription: 'Laari er den nettbaserte tilstedeværelsen av Laari Adda Pakistani Street Food, en restaurantopplevelse som hyller dristige og autentiske pakistanske gatematsmaker. Nettstedet introduserer besøkende for en levende meny med tradisjonelle retter og drikke inspirert av Pakistans rike kulinariske arv, servert i et livlig miljø som blander uformell bespisning med kulturelle smaker. Kunder kan utforske forskjellige mat- og drikkealternativer, sjekke ut drikkelisten og finne kontaktinformasjon eller reservasjonsinformasjon for å planlegge et besøk. Restauranten har fått oppmerksomhet som et populært valg for å oppleve ekte pakistansk gatemat utenfor Pakistan, spesielt kjent på steder som Lillestrøm i Norge. Gjennom nettstedet får gjestene en følelse av matkulturen, hvordan de bestiller eller tar kontakt, og hva som gjør Laari til et smakfullt stoppested for elskere av sørasiatisk mat.',
+    partyroomtitle: 'Våre spesialiteter',
+    partyroomdescription: 'Merket Spis-oh kommer fra Spiser (spising på norsk) og Khaoh (spising på hindi). Spis-oh-menyen er utformet rundt tre sørindiske basisretter og roterende hovedretter med karriretter. Disse rettene er ikke bare deilige, men representerer også den rike kulturen og arven i Sør-India.',
+    card1title: 'Dosa',
+    card1description: 'Dosa er en sprø, smakfull crêpe laget av fermentert ris og linserøre, og serveres vanligvis med chutney og sambar. Det er en rett i Sør-India, og den nytes også som en snacks eller et lett måltid.',
+    card2title: 'Biriyani',
+    card2description: 'Biriyani er en smakfull risrett laget med krydder, grønnsaker eller kjøtt og ris. Det er en populær rett over hele India og er kjent for sin unike aroma og smak.',
+    card3title: 'Kerala Parotta',
+    card3description: 'Det er et lagvis flatbrød laget av mel, olje og vann. Prosessen med å lage Kerala Parotta innebærer dyktig elting og strekking av deigen, noe som resulterer i en myk og luftig tekstur. Serveres vanligvis med karri.',
+    callus: 'Bestill Nå',
+    cateringtitle: 'Laget for ethvert arrangement med Spisoh',
+    cateringdescription: 'Opplev den ekte smaken av Sør-India med Spisoh, hvor autentiske smaker møter kvalitetsingredienser og lidenskapelig matlaging. Enten det er en fest, familiesammenkomst, firmaarrangement eller feiring med venner, bringer vi dristige krydder, rike tradisjoner og uforglemmelige måltider rett til bordet eller arrangementslokalet ditt. Våre cateringtjenester gjør anledningene dine stressfrie mens vi serverer deilig mat inspirert av sørindiske klassikere.',
+    cateringcard1title: 'Sørindisk catering med autentisk smak',
+    cateringcard1description: 'Nyt de dristige, rike smakene på Spisohs meny – fra dosa og biryani til karriretter i Kerala-stil – brakt til live med ferske ingredienser og tradisjonelle teknikker, perfekt for store eller små sammenkomster.',
+    cateringcard2title: 'Tilpassede menyalternativer for arrangementet ditt',
+    cateringcard2description: 'Velg mellom faste cateringmenyer eller skreddersy ditt eget utvalg slik at det matcher arrangementsstilen, gjestenes preferanser og kostholdsbehov – enten du arrangerer en koselig middag eller en stor feiring.',
+    cateringcard3title: 'Perfekt for enhver feiring',
+    cateringcard3description: 'Fra bursdager og private fester til firmaarrangementer eller høytidsfester, sørger cateringfirmaet vårt for sømløs service og minneverdige måltider, slik at du kan nyte hvert øyeblikk med gjestene dine.',
     openhours: 'Åpningstider',
     monday: 'Mandag',
     tuesday: 'Tirsdag',
@@ -122,16 +174,70 @@ const LANGUAGE_INFO: Record<LangCode, LanguageInfo> = {
     quickinfo: 'Snarveier',
     information: 'Informasjon',
     app: 'Last ned FOODSTED App',
-    allrightrevserved: '© 2026 Shaahi Mahall Indisk Restaurant & Bar. Alle rettigheter reservert.',
-    poweredby: 'Drevet av FoodSted',
+    allrightrevserved: '© 2026 Laari Adda Pakistani Street Food. Alle rettigheter reservert.',
+    poweredby: 'Drevet av FOODSTED',
     ourmenu: 'Vår meny',
+    explore: 'UTFORSKE',
     menutagline: 'Utforsk våre kulinariske herligheter',
     getmenu: 'Få menyen vår',
     getmenudescription: 'Last ned vår fullstendige meny på ditt foretrukne språk.',
     getmenubutton1: 'Last ned engelsk meny',
     getmenubutton2: 'Last ned norsk meny',
     copied: 'Kopiert',
-    closed: 'Stengt',
+    closed: 'Lukket',
+    quantity: 'Antall',
+    specialinstructions: ' Spesiell Instruksjon',
+    optional: 'Valgfri',
+    addtocart: 'Legg i handlekurven',
+    cartnote: 'Klar til å legge i handlekurv',
+    carttagline: 'Nyt ganen din med vår autentiske meny',
+    checkout: 'kassen',
+    allergens: 'Allergener',
+    yourcart: 'Din Handlekurv',
+    orderitems: 'Bestillings Varer',
+    ordersummary: 'Bestillings Sammendrag ',
+    emptycart: 'Handlekurven din er tom.',
+    noitem: 'Ingen varer til kassen.',
+    noteordersummary: 'Sjekk bestillingen din før du legger den inn.',
+    placeorder: 'Legg inn bestilling',
+    gotomenu: 'Gå til Meny',
+    name: 'Navn',
+    number: 'Mobil Nummer',
+    emailadress: 'E-post Adresse',
+    addcomment: 'Legg til Kommentar',
+    payment: 'Betalingsmåte',
+    payoncounter: "brukBetal på skranke",
+    picktime: 'Estimert hentetid',
+    apply: 'Søke',
+    promodiscount: 'Kampanje rabatt',
+    discount: 'RABATTER',
+    applied: 'Påført',
+    minutes: 'minutter',
+    ordertitle: 'Bestillings detaljer',
+    ordertagline: 'Takk for bestillingen din. Her er bestillingsdetaljene dine.',
+    payunsuccess: 'Betalingen mislyktes',
+    payunsuccessmsg: 'Transaksjonen din kunne ikke behandles.',
+    selectmethod: 'Velg betalingsmetode',
+    tryagain: 'Prøv igjen',
+    paysuccess: 'Betaling vellykket',
+    paysuccessmsg: 'Transaksjonen din er fullført.',
+    ordernumber: 'Bestillings Nummer',
+    customer: 'Kunde',
+    ordertype: 'Bestille Type',
+    orderstatus: 'Bestillee status',
+    orderitemcap: 'BESTILTE VARER',
+    items: 'Varer',
+    discountsm: 'Rabatt',
+    servicefee: 'Service avgift',
+    deliveryfee: 'Leveranse avgift',
+    gobacktomenu: 'Gå tilbake til meny',
+    required: 'Obligatorisk',
+    sildetitle:' Galleriet vårt',
+    sectiontag: 'Hva folk sier',
+    sectiontitle1: 'Kunde ',
+    sectiontitle2: 'Anmeldelser',
+    sectionsubtitle: 'Ekte erfaringer fra våre verdsatte kunder',
+
   },
   en: {
     htmlTag: 'en',
@@ -141,36 +247,35 @@ const LANGUAGE_INFO: Record<LangCode, LanguageInfo> = {
     about: 'About',
     menu: 'Menu',
     takeaway: 'Takeaway',
-    partyroom: 'Party Room',
+    partyroom: 'Delicacies',
     catering: 'Catering',
     booktable: 'Book Table',
     cart: 'Cart',
-    cartbody: 'Your cart is empty',
     open: 'Open Now',
     discount1: '10% Discount is Live! Use Code:',
     discount2: 'Dine in- free dessert',
-    herodescription: 'Experience a legacy of taste — authentic royal delicacies crafted for the modern Maharaja',
+    herodescription: 'Laari Adda Pakistani Street Food brings the vibrant taste of Pakistani street food to Norway, serving bold flavors, authentic spices, and unforgettable culinary experiences in every bite.',
     ordernow: 'Order Now',
-    aboutitle: 'About the Restaurant',
-    abouttitle: 'Welcome to Shaahi Mahall Indisk Restaurant & Bar',
-    aboutdescription: 'At Shaahi Mahall every dish tells a story of royal heritage and timeless flavour. Inspired by the grand kitchens of India, our dining experience blends age-old traditions with a refined modern touch, creating a journey of taste meant to be enjoyed by all. From our carefully balanced spices to our signature curries, each recipe is crafted with passion and authenticity. Fresh herbs, quality ingredients, and time-honoured techniques come together to deliver rich aromas and unforgettable flavours in every bite. Complete your experience with our curated selection of refreshing lassis, craft beers, and fine wines - thoughtfully chosen to complement our cuisine and elevate every meal. Whether you are joining us for a casual gathering or a special celebration, Shaahi Mahall invites you to dine like royalty and savour something truly exceptional.',
-    partyroomtitle: 'Celebrate in Style',
-    partyroomdescription: 'Host your special moments in the elegant party space at Shaahi Mahall. Whether it’s a birthday, family gathering, or corporate dinner, our welcoming atmosphere and attentive service create the perfect setting for memorable celebrations.',
-    card1title: 'Birthday Celebrations',
-    card1description: 'Celebrate your special day in a vibrant and comfortable party space with great food and a joyful atmosphere.', 
-    card2title: 'Anniversary Celebrations',
-    card2description: 'Make your anniversary memorable with an intimate setting, delicious cuisine, and elegant service.',
-    card3title: 'Private & Corporate Events',
-    card3description: 'Perfect for team gatherings, corporate dinners, and private celebrations with family and friends.',
-    callus: 'Call Us',
-    cateringtitle: 'Crafted For Every Occasion',
-    cateringdescription: 'Experience premium catering with Shaahi Mahall, where tradition meets modern elegance. We prepare every dish with carefully selected spices and fresh ingredients to create unforgettable flavours. From weddings to corporate events, we ensure a smooth, professional service that lets you enjoy your special moments stress-free.',
-    cateringcard1title: 'Royal Catering Experience',
-    cateringcard1description: 'Savor the richness of Shaahi Mahall cuisine, elegantly presented for every special occasion.',
-    cateringcard2title: 'Authentic Modern Flavours',
-    cateringcard2description: 'Traditional Indian recipes crafted with fresh ingredients and perfectly balanced spices.',
-    cateringcard3title: 'Perfect for Every Occasion',
-    cateringcard3description: 'Catering tailored for weddings, corporate events, birthdays, and all celebrations.',
+    aboutitle: 'About  Restaurant',
+    abouttitle: 'Welcome to Laari Adda Pakistani Street Food',
+    aboutdescription: 'Laari  is the online presence of Laari Adda Pakistani Street Food, a restaurant experience that celebrates bold and authentic Pakistani street-food flavors. The site introduces visitors to a vibrant menu featuring traditional dishes and drinks inspired by the rich culinary heritage of Pakistan, served in a lively setting that blends casual dining with cultural tastes. Customers can explore different food and beverage options, check out the drink list, and find contact details or reservation information to plan a visit. The restaurant has gained attention as a popular choice for experiencing real Pakistani street food outside of Pakistan, especially noted in places like Lillestrøm, Norway. Through the website, guests get a sense of the food culture, how to order or reach out, and what makes Laari a flavorful stop for lovers of South Asian cuisine.',
+    partyroomtitle: 'Our Specialities',
+    partyroomdescription: 'The brand Spis-oh comes from Spiser (eating in Norsk) and Khaoh (eating in Hindi). Spis-oh menu is designed around 3 staple South Indian Foods and revolving main curry choices. These dishes are not only delicious but also represent the rich culture and heritage of South India.',
+    card1title: 'Dosa',
+    card1description: 'Dosa is a crispy, savory crepe made from fermented rice and lentil batter and is usually served with chutney and sambar. It is a dish in South India and is also enjoyed as a snack or light meal.',
+    card2title: 'Biriyani',
+    card2description: 'Biriyani is a flavorful rice dish made with spices, vegetables or meat, and rice. It is a popular dish across India and is known for its unique aroma and flavor.',
+    card3title: 'Kerala Parotta',
+    card3description: 'It is a layered flatbread made from flour, oil, water. Process of making Kerala Parotta involves skillful kneading and stretching of the dough, resulting in a soft and fluffy texture. Typically served with curry.',
+    callus: 'order Now',
+    cateringtitle: 'Crafted for Every Event with Spisoh',
+    cateringdescription: 'Experience the true taste of South India with Spisoh, where authentic flavours meet quality ingredients and passionate cooking. Whether it’s a party, family gathering, corporate event, or celebration with friends, we bring bold spice, rich traditions, and unforgettable meals straight to your table or event space. Our catering services make your occasions stress-free while serving delicious food inspired by South Indian classics.',
+    cateringcard1title: 'South Indian Catering with Authentic Taste',
+    cateringcard1description: 'Delight in the bold, rich flavours of Spisoh’s menu — from dosa and biryani to Kerala-style curries — brought to life with fresh ingredients and traditional techniques, perfect for gatherings big or small.',
+    cateringcard2title: 'Custom Menu Options for Your Event',
+    cateringcard2description: 'Choose from set catering menus or tailor your own selection to match your event style, guest preferences, and dietary needs — whether you’re hosting a cozy dinner or a large celebration.',
+    cateringcard3title: 'Perfect for Every Celebration',
+    cateringcard3description: 'From birthdays and private parties to corporate functions or holiday feasts, our catering ensures seamless service and memorable meals, so you can enjoy every moment with your guests.',
     openhours: 'Opening Hours',
     monday: 'Monday',
     tuesday: 'Tuesday',
@@ -186,16 +291,70 @@ const LANGUAGE_INFO: Record<LangCode, LanguageInfo> = {
     quickinfo: 'Quick Links',
     information: 'Information',
     app: 'Download FOODSTED App',
-    allrightrevserved: '© 2026 Shaahi Mahall Indisk Restaurant & Bar. All rights reserved.',
-    poweredby: 'Powered by FoodSted',
+    allrightrevserved: '© 2026 Laari Adda Pakistani Street Food. All rights reserved.',
+    poweredby: 'Powered by FOODSTED',
     ourmenu: 'Our Menu',
     menutagline: 'Explore Our Culinary Delights',
+    explore: 'EXPLORE',
     getmenu: 'Get Our Menu',
     getmenudescription: 'Download our full menu in your preferred language.',
     getmenubutton1: 'Download English Menu',
     getmenubutton2: 'Download Norwegian Menu',
     copied: 'Copied',
     closed: 'Closed',
+    quantity: 'Quantity',
+    specialinstructions: ' Special Instruction',
+    optional: 'Optional',
+    addtocart: ' Add To Cart ',
+    cartnote: 'Ready to add to cart ',
+    carttagline: 'Delight your palate with our authentic menu',
+    checkout: 'Checkout',
+    allergens: 'Allergens',
+    yourcart: 'Your Cart',
+    orderitems: 'Order Items',
+    ordersummary: 'Order Summary',
+    emptycart: 'Your cart is empty.',
+    noitem: 'No items to checkout.',
+    noteordersummary: 'Review your order before placing it.',
+    placeorder: 'Place Order',
+    gotomenu: 'Go to Menu',
+    name: 'Name',
+    number: 'Moblie Number',
+    emailadress: 'Email Address',
+    addcomment: 'Add Comment',
+    payment: 'Payment Method',
+    payoncounter: "Pay on Counter",
+    picktime: 'Estimated Pickup Time',
+    apply: 'Apply',
+    promodiscount: 'Promo Discount',
+    discount: 'DISCOUNTS',
+    applied: 'Applied',
+    minutes: 'minutes',
+    ordertitle: 'Order Details',
+    ordertagline: 'Thank you for your order. Here are your order details.',
+    payunsuccess: 'Payment Unsuccessful',
+    payunsuccessmsg: 'Your transaction could not be processed',
+    selectmethod: 'Select payment method',
+    tryagain: 'Try Again',
+    paysuccess: 'Payment Successful',
+    paysuccessmsg: 'Your transaction has been completed.',
+    ordernumber: 'Order Number',
+    customer: 'Customer',
+    ordertype: 'Order Type',
+    orderstatus: 'Order Status',
+    orderitemcap: 'ORDERED ITEMS',
+    items: 'Items',
+    discountsm: 'Discount',
+    servicefee: 'Service fee',
+    deliveryfee: 'Delivery fee',
+    gobacktomenu: 'Go Back to Menu',
+    required: 'Required',
+    sildetitle:'Our Gallery',
+    sectiontag: 'What People Say',
+    sectiontitle1: 'Customer ',
+    sectiontitle2: 'Reviews',
+    sectionsubtitle: 'Real experiences from our valued customers',
+
   }
 };
 

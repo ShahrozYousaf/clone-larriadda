@@ -5,8 +5,8 @@
   --color-bg:         #000000;
   --color-card-bg:    #ffffff;
   --color-footer-bg:  #0f1a2e;
-  --color-gold:       #c9a84c;
-  --color-gold-light: #e2b96a;
+  --color-gold:       #bca467; 
+  --color-gold-light: #c09f4a; 
   --color-white:      #ffffff;
   --color-muted:      #a0a8b8;
   --color-overlay:    rgba(10, 20, 45, 0.72);
@@ -50,48 +50,50 @@
 }
 
 // Breadcrumbs
-.breadcrumbs {
+.breadcrumb {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: var(--color-muted);
-  margin-bottom: 22px;
-  letter-spacing: 0.5px;
-}
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 
-.separator {
-  color: var(--color-muted);
-  opacity: 0.6;
-}
 
-.crumb {
-  cursor: default;
-  transition: color var(--transition-base);
-
-  &.active {
-    color: var(--color-white);
-    font-weight: 700;
+  &__link {
+    color: #9ca3af;
+    text-decoration: none;
+    transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    &:hover { 
+      color: #ffffff;
+      
+    }
   }
+
+  &__sep     { 
+    color: #9ca3af;
+    margin: 0 2px;
+  }
+  &__current { 
+    color: #bca467;
+    font-weight: 700;
+    }
 }
 
 // Gold Divider
 .divider-line {
-  width: 64px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-  border-radius: 2px;
-  margin: 0 auto 24px;
+    width: 60px; 
+    height: 3px;             
+    background: #bca467;    
+    border-radius: 50px;      
+    margin: 0 auto 24px;
 }
 
 // Tagline
 .tagline {
-  font-family: var(--font-body);
+  // font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--color-gold);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  color: #bca467; 
   font-weight: 400;
   margin: 0;
   opacity: 0.9;
@@ -146,7 +148,7 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light), var(--color-gold));
+    background:  #bca467;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
@@ -230,7 +232,7 @@
 
 .explore-icon {
   font-size: 2rem;
-  color: var(--color-gold);
+  color: #bca467; 
   display: block;
   animation: none;
 
@@ -305,15 +307,16 @@
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-white);
+  color: #fff;
   text-align: center;
   letter-spacing: 0.3px;
   transition: color var(--transition-base);
 
   .menu-card:hover &,
   .menu-card:focus-visible & {
-    color: var(--color-gold-light);
+    color: #fff;
   }
+
 }
 
 // ─── Download CTA Section ─────────────────────────────────────────────────────
@@ -328,7 +331,7 @@
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
-  color: var(--color-gold);
+  color: #bca467;
   margin: 0 0 14px;
   letter-spacing: -0.5px;
 }
@@ -352,7 +355,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: var(--color-gold);
+  background: #bca467;
   color: #0a1020;
   border: none;
   border-radius: 12px;
@@ -370,7 +373,7 @@
   box-shadow: 0 4px 18px rgba(201, 168, 76, 0.25);
 
   &:hover {
-    background: var(--color-gold-light);
+    background: #bca467;
     transform: translateY(-3px);
     box-shadow: 0 10px 32px rgba(201, 168, 76, 0.4);
   }
@@ -390,23 +393,3 @@
   }
 }
 
-// ── Breadcrumb ────────────────────────────────────────────────────────────
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-
-  &__link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color var(--transition-base);
-    &:hover { color: var(--text-primary); }
-  }
-
-  &__sep     { color: var(--text-muted); }
-  &__current { color: var(--accent-gold); font-weight: 700; }
-}

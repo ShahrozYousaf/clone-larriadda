@@ -4,7 +4,6 @@ import { LanguageService } from '../../services/language.service';
 import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
 import { General } from '../../services/general';
-import { config } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { APP_CONFIG } from '../../app.config';
 @Component({
@@ -31,8 +30,8 @@ export class Menu implements OnInit {
   }
   downloadMenu(language: 'english' | 'norwegian'): void {
     const fileMap: Record<string, string> = {
-      english: 'assets/menus/menu-english.pdf',
-      norwegian: 'assets/menus/menu-norwegian.pdf',
+      english: 'English-Menu.pdf',
+      norwegian: 'Norsk-Meny.pdf',
     };
     const link = document.createElement('a');
     link.href = fileMap[language];

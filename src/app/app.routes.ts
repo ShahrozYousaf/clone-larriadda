@@ -7,11 +7,6 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'ramadanbooking',
-    loadComponent: () =>
-      import('./pages/ramadanbooking/ramadanbooking').then(m => m.Ramadanbooking)
-  },
-  {
     path: ':lang',
     canActivate: [langGuard],
     children: [
@@ -39,6 +34,16 @@ export const routes: Routes = [
         path: 'checkout',
         loadComponent: () =>
           import('./pages/checkout/checkout').then(m => m.Checkout)
+      },
+      {
+        path: 'order/:quotation_id',
+        loadComponent: () =>
+          import('./pages/order/order').then(m => m.Order)
+      },
+      {
+        path: 'ramadanbooking/orders',
+        loadComponent: () =>
+          import('./pages/ramadanbooking/ramadanbooking').then(m => m.Ramadanbooking)
       }
     ]
   },
